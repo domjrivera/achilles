@@ -14,7 +14,7 @@ def get_cmd_args():
         print("No compatible files found.")
         quit(0)
     if len(ls) > 100:
-        ans = input("Found " + str((len(ls) - 1)) + " " + ls[0] + " files. Do you want to continue(Yy/Nn)? ")
+        ans = input("Found " + str((len(ls) - 1)) + " " + ls[0] + " files. Do you want to continue? [y]es, [n]o")
         if "y" in ans.lower():
             pass
         else:
@@ -62,3 +62,4 @@ def get_files(path, language="java"):
                 if extension in item:
                     ls.append(root + "/" + item)
     return [language] + list(set(ls))
+

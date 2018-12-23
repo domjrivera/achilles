@@ -5,4 +5,3 @@ version_info = "\x1b[33mProject Achilles ....................... " + __version__
 
 languages = {"java": [".java", ".j"],
              "python": [".py", ".pyw"]}
-
