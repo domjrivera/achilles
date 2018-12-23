@@ -2,8 +2,9 @@ from utility import *
 
 
 def main():
-    get_cmd_args()
-
+    files, lang = get_cmd_args()
+    for file in files:
+        print("  " + file)
 
 
 if __name__ == "__main__":
