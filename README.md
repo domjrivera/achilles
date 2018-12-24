@@ -1,17 +1,10 @@
 ## Project Achilles - A Static Source Code Vulnerability Identifier
 
 #### Using Achilles from the Terminal
-To run Achilles form the command prompt, see below.
+`achilles <file>` - Achilles will attempt to automatically decide the language to use based on the file extension. 
 
-##### To evaluate a single file:
-```
-achilles <language> <file>
-```
-or
-```
-achilles <file>
-```
-##### To recursively traverse and evaluate all files within a folder:
-```
-achilles <language> <folder>
-```
+`achilles <language> <file>` - Intended for use with source code that may have an obscure file extension.
+
+`achilles <language> <folder>` - This command will recursively traverse an entire folder and evaluate any files
+ with extensions pertaining to a language. If more than 100 files are found, Achilles will prompt the user before
+ continuing.
