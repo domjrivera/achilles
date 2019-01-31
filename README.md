@@ -1,6 +1,6 @@
 ## Project Achilles - A Static Source Code Vulnerability Identifier
-![Achilles](assets/logo.jpg
-)
+![Achilles](assets/logo.jpg)
+
 ### Using Achilles from the Terminal
 * `achilles <file>` - Achilles will attempt to automatically decide the language to use based on the file extension. 
 

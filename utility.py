@@ -63,3 +63,8 @@ def get_files(path, language="java"):
                     ls.append(root + "/" + item)
     return [language] + list(set(ls))
 
+
+def read_file(path):
+    with open(path, 'r') as content_file:
+        return content_file.read()
+
