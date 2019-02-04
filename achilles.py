@@ -3,27 +3,16 @@ from javalect import *
 
 
 def main():
-    # Comment out bash input for now.
     # files, lang = get_cmd_args()
-    # for file in files:
-    #     print(file)
+    files, lang = ["Test.java"], "java"  # Use while testing
 
-
-
-    contents = read_file("Test.java")
-    tokens = tokenize(contents)
-    # for token in tokens:
-    #     print(token)
-    fwd_map, rev_map = keymap(tokens)
-
-    # for k, v in fwd_map:
-    #     print(k, v)
-
-    # parser = javalang.parser.Parser(tokens)
-    # comp_unit = javalang.parse.parse(contents)
-    # for node, path in comp_unit:
-    #     print(path)
-    # x = parser.parse()
+    print("\x1b[36mEvaluating the following files:\x1b[m")
+    for file in files:
+        print("  ", file)
+    #
+    # if lang == "java":
+    #     for file in files:
+    #         Javalect.execute_routine(file)
 
 
 if __name__ == "__main__":

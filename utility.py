@@ -5,6 +5,7 @@ import os
 
 
 def get_cmd_args():
+    print(version_info)
     parser = argparse.ArgumentParser(description='Parse input string')
     parser.add_argument('goals', help='HELP!', nargs='+')
     args = parser.parse_args()
@@ -14,12 +15,17 @@ def get_cmd_args():
         print("No compatible files found.")
         quit(0)
     if len(ls) > 100:
-        ans = input("Found " + str((len(ls) - 1)) + " " + ls[0] + " files. Do you want to continue? [y]es, [n]o")
+        ans = input("Found " + str((len(ls) - 1)) + " " + ls[0] + " files. Do you want to continue? [y]es, [n]o: ")
         if "y" in ans.lower():
             pass
         else:
             quit()
     return ls[1:], ls[0]
+
+
+# Courtesy of Marco L. on Stack Overflow
+def find_occurrences(s, ch):
+    return [i for i, letter in enumerate(s) if letter == ch]
 
 
 def parse_cmd_args(goals):
@@ -58,8 +64,10 @@ def get_files(path, language="java"):
     ls = []
     for root, _, files in os.walk(path):
         for item in fnmatch.filter(files, "*"):
-            for extension in languages[language]:
-                if extension in item:
+            extension_mark = find_occurrences(item, ".")
+            if len(extension_mark) > 0:
+                extension_mark = extension_mark[-1]
+                if item[extension_mark:] in languages[language]:
                     ls.append(root + "/" + item)
     return [language] + list(set(ls))
 

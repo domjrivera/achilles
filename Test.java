@@ -4,7 +4,7 @@ class Test {
     final int PI = 2;
 
     public static void main(String[] args) {
-        x = 2;
+        int x = 23;
         if (x == 2) {
             System.out.println("Hello World!");
         }
