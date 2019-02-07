@@ -11,3 +11,28 @@
  prompt the user before continuing.
 
 
+
+
+## Building Achilles Support for Other Languages
+Project Achilles was designed with crowdsourcing in mind.
+In theory, adding additional language support should be relatively simple.
+1. Add an entry to the dictionary `languages` such that the key is the name of
+the language, and the value is a list of the possible file extensions for files
+of that type. Note that the key of this dictionary will be the language keyword 
+used in the command line when calling Achilles. Multiple different language 
+variants can be added by repeating the same value list for a different key,
+effectively representing the same language in more than one different ways.
+This may be useful if a language may be tedious to type out in terminal, for instance,
+C++, Visual Basic, Objective-C, c#, and other languages with punctuations that slow
+down typing... 
+1. Modify the if-statement in the main() method of achilles.py by adding:
+    ```
+    elif lang == <name of language key>:
+        for file in files:
+            <Name of language key>lect.execute_routine(file)
+    ```
+1. Create a <name of language key>lect.py file with the necessary functions
+to transform the code in that language as required by the neural network.
+Follow the conventions in achilles.py as a guide.
+
+    

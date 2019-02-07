@@ -92,34 +92,23 @@ def chunker(contents):
 
     for chunk in chunks:
         contents = contents.replace(chunk, "")
-    chunks.append(contents)
-    # print(contents)
-    return chunks
+    return [contents] + chunks
 
 
 class Javalect:
     @staticmethod
     def execute_routine(file):
-        contents = read_file(file)
-        chunks = chunker(contents)
-        for chunk in chunks:
-            print(chunk)
-            print("\n\n\n\n\n")
-
-        # tokens = tokenize(contents)
-        # comp_unit = javalang.parse.parse(contents)
-        # i = 1
-        # for x, y in comp_unit:
-        #     print(i, x)
-        #     i += 1
-        #
-        # ========================
-        #
         # === Read File
+        contents = read_file(file)
 
         # === Chunker
+        chunks = chunker(contents)
+        # for chunk in chunks:
+        #     print(chunk)
+        #     print("\n\n\n\n\n")
 
         # === Sanitize
+
 
         # === Tokenize
 
