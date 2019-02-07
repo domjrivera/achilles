@@ -5,7 +5,6 @@ import os
 
 
 def get_cmd_args():
-    print(version_info)
     parser = argparse.ArgumentParser(description='Parse input string')
     parser.add_argument('goals', help='HELP!', nargs='+')
     args = parser.parse_args()
@@ -20,6 +19,7 @@ def get_cmd_args():
             pass
         else:
             quit()
+    print(version_info)
     return ls[1:], ls[0]
 
 
@@ -76,3 +76,23 @@ def read_file(path):
     with open(path, 'r') as content_file:
         return content_file.read()
 
+
+# Courtesy of interactivepython.org
+class Stack:
+    def __init__(self):
+        self.items = []
+
+    def is_empty(self):
+        return self.items == []
+
+    def push(self, item):
+        self.items.append(item)
+
+    def pop(self):
+        return self.items.pop()
+
+    def peek(self):
+        return self.items[len(self.items)-1]
+
+    def size(self):
+        return len(self.items)

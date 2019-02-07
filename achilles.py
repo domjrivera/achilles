@@ -9,10 +9,13 @@ def main():
     print("\x1b[36mEvaluating the following files:\x1b[m")
     for file in files:
         print("  ", file)
-    #
-    # if lang == "java":
-    #     for file in files:
-    #         Javalect.execute_routine(file)
+
+    if lang == "java":
+        for file in files:
+            # print(file)
+            Javalect.execute_routine(file)
+    else:
+        quit()
 
 
 if __name__ == "__main__":

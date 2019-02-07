@@ -2,19 +2,22 @@ package javalang.brewtab.com;
 class Test {
 
     final int PI = 2;
+    private int val;
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         int x = 23;
         if (x == 2) {
             System.out.println("Hello World!");
         }
         else {
-            hi();
+            hi(2);
         }
     }
 
-    public static void hi() {
+
+
+    public static void hi(int j) {
         System.out.println("HI");
-        byte b = 0;
+        byte b = 0010;
     }
 }
