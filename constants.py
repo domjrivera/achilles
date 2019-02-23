@@ -6,3 +6,10 @@ version_info = "\x1b[33mProject Achilles ....................... " + __version__
 
 languages = {"java": [".java", ".j"],
              "python": [".py", ".pyw"]}
+
+
+LEARN_RATE = 0.001
+BATCH_SIZE = 64
+NUM_EPOCHS = 10
+NOPATIENCE = 10
+THE_VSPLIT = 0.50

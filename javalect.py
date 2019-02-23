@@ -103,26 +103,13 @@ class Javalect:
 
         # === Chunker
         chunks = chunker(contents)
-        # for chunk in chunks:
-        #     print(chunk)
-        #     print("\n\n\n\n\n")
+        v = "\x1b[34m\"\x1b[m"
+        for chunk in chunks:
+            print(v, chunk, v)
+            print("\n\n\n\n\n")
 
         # === Sanitize
 
-
         # === Tokenize
 
-        # Feed LSTM
-        # contents = read_file("Test.java")
-        # for token in tokens:
-        #     print(token)
-        # fwd_map, rev_map = keymap(tokens)
-
-        # for k, v in fwd_map:
-        #     print(k, v)
-
-        # parser = javalang.parser.Parser(tokens)
-        # for node, path in comp_unit:
-        #     print(path)
-        # x = parser.parse()
-
+        # === Feed LSTM

@@ -20,4 +20,8 @@ class Test {
         System.out.println("HI");
         byte b = 0010;
     }
+
+    private static int guy() {
+        return 1;
+    }
 }
