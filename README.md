@@ -1,6 +1,10 @@
 ## [WIP]Project Achilles - A Static Source Code Vulnerability Identifier
 ![Achilles](assets/logo.jpg)
 
+### Just Add Water!
+1. Download the [NIST Juliet Stand-alone Suite for Java](https://samate.nist.gov/SRD/testsuites/juliet/Juliet_Test_Suite_v1.3_for_Java.zip).
+
+
 ### Using Achilles from the Terminal
 * `achilles <file>` - Achilles will attempt to automatically decide the language to use based on the file extension. 
 
@@ -9,8 +13,6 @@
 * `achilles <language> <folder>` - This command will recursively traverse an entire folder and evaluate any files
  with extensions pertaining to the language specified. If more than 100 compatible files are found, Achilles will 
  prompt the user before continuing.
-
-
 
 
 ## Building Achilles Support for Other Languages
