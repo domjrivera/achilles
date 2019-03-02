@@ -94,6 +94,46 @@ def chunker(contents):
     return [contents] + chunks
 
 
+class JavaJulietSuite:
+    def __init__(self, test_suite_location):
+        list_of_paths = get_files(test_suite_location)[1:]
+        self.files = []
+        for path in list_of_paths:
+            self.files.append(JavaJuliet(path))
+
+    def get_good(self):
+        ls = []
+        for file in self.files:
+            ls.extend(file.good)
+        return ls
+
+    def get_bad(self):
+        ls = []
+        for file in self.files:
+            ls.extend(file.bad)
+        return ls
+
+    def get_chunks(self):
+        return self.get_good() + self.get_bad()
+
+    def write_good(self, location="good.txt"):
+        good, s = self.get_good(), ""
+        for g in good:
+            s = s + g + "\n\n\n\n\n"
+        file_object = open(location, "w")
+        file_object.write(s)
+        file_object.close()
+
+    def write_bad(self, location="bad.txt"):
+        bad, s = self.get_bad(), ""
+        for g in bad:
+            s = s + g + "\n\n\n\n\n"
+        file_object = open(location, "w")
+        file_object.write(s)
+        file_object.close()
+
+
+
 class JavaJuliet:
     def __init__(self, path):
         self.contents = JavaJuliet.java_file_cleaner(path)
@@ -184,7 +224,3 @@ class Javalect:
         # === Tokenize
 
         # === Feed LSTM
-
-
-f = "juliet_java/CWE698_Redirect_Without_Exit/CWE698_Redirect_Without_Exit__Servlet_03.java"
-jj = JavaJuliet(f)
