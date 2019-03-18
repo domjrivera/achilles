@@ -34,6 +34,12 @@ def tokenize(contents):
     return javalang.tokenizer.tokenize(contents)
 
 
+def collect_data(data_path):
+    suite = JavaJulietSuite(data_path)
+    suite.write_good()
+    suite.write_bad()
+
+
 # Maps each token to value uniquely.
 def keymap(tokens, clean_primitives=True):
     d, i = dict(), 0
@@ -131,7 +137,6 @@ class JavaJulietSuite:
         file_object = open(location, "w")
         file_object.write(s)
         file_object.close()
-
 
 
 class JavaJuliet:

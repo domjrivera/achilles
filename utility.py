@@ -1,7 +1,9 @@
-from constants import *
 import argparse
+import csv
 import fnmatch
 import os
+
+from constants import *
 
 
 def get_cmd_args():
@@ -77,6 +79,37 @@ def read_file(path):
         return content_file.read()
 
 
+def read_data(polarity, language="java"):
+    return read_file("data/" + language + "_" + polarity + ".txt").split("\n\n\n\n\n")
+
+
+def flatten(s):
+    s = s.replace("\t", " ")
+    s = s.split("\n")
+    for x in range(len(s)):
+        s[x] = s[x].strip()
+    return " ".join(s)
+
+
+def generate_binary_csv(language="java"):
+    g = read_data("good", language=language)
+    b = read_data("bad", language=language)
+    deck = []
+    for good in g:
+        f = flatten(good)
+        if len(f) > 0:
+            deck.append([f, 0])
+    for bad in b:
+        f = flatten(bad)
+        if len(f) > 0:
+            deck.append([f, 1])
+
+    with open("data/" + language + "_" + "data.csv", 'w') as f:
+        writer = csv.writer(f)
+        writer.writerows(["sequence", ""] + sorted(deck))
+    f.close()
+
+
 # Courtesy of interactivepython.org
 class Stack:
     def __init__(self):
@@ -92,10 +125,10 @@ class Stack:
         return self.items.pop()
 
     def peek(self):
-        return self.items[len(self.items)-1]
+        return self.items[len(self.items) - 1]
 
     def size(self):
         return len(self.items)
 
 
-
+generate_binary_csv("java")
