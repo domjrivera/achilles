@@ -49,7 +49,7 @@ def main():
     test_sequences = tok.texts_to_sequences(X_test)
     test_sequences_matrix = sequence.pad_sequences(test_sequences, maxlen=MAX_LEN)
     accr = model.evaluate(test_sequences_matrix, Y_test)
-    print('Test set\n  Loss: {:0.3f}\n  Accuracy: {:0.3f}'.format(accr[0], git add accr[1]))
+    print('Test set\n  Loss: {:0.3f}\n  Accuracy: {:0.3f}'.format(accr[0], accr[1]))
 
 
 if __name__ == "__main__":
