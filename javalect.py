@@ -1,4 +1,5 @@
 import javalang
+import model
 
 from utility import *
 
@@ -214,18 +215,9 @@ class JavaJuliet:
 class Javalect:
     @staticmethod
     def execute_routine(file):
-        # === Read File
-        contents = read_file(file)
-
-        # === Chunker
+        contents = JavaJuliet.java_file_cleaner(file)
         chunks = chunker(contents)
-        v = "\x1b[34m\"\x1b[m"
-        # for chunk in chunks:
-        #     print(v, chunk, v)
-        #     print("\n\n\n\n\n")
+        for chunk in chunks:
+            print("Analyzing", file)
+            tokens = tokenize(chunk)
 
-        # === Sanitize
-
-        # === Tokenize
-
-        # === Feed LSTM

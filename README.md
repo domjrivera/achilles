@@ -36,4 +36,5 @@ down typing...
 1. Create a <name of language key>lect.py file with the necessary functions
 to transform the code in that language as required by the neural network.
 Follow the conventions in achilles.py as a guide.
-   
+
+https://www.kaggle.com/kredy10/simple-lstm-for-text-classification/notebook
