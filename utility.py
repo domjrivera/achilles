@@ -1,12 +1,10 @@
-from random import shuffle
-
-from constants import *
-import argparse
-import fnmatch
-import os
-import csv
 from javalect import *
 from model import *
+import csv
+from random import shuffle
+import argparse
+import os
+import fnmatch
 
 
 def get_cmd_args():
@@ -141,7 +139,6 @@ def balance_data(language="java"):
             elif row[1] == "0":
                 g.append(row)
     size = min(len(g), len(b))
-    print(size)
     ls = g[0:size] + b[0:size]
     shuffle(ls)
     with open("data/" + language + "_" + "balanced_data.csv", 'w') as h:
@@ -149,7 +146,6 @@ def balance_data(language="java"):
         writer.writerows([["input", "label"]] + ls)
     h.close()
 
-balance_data()
 
 # Courtesy of interactivepython.org
 class Stack:
@@ -170,3 +166,12 @@ class Stack:
 
     def size(self):
         return len(self.items)
+
+
+class Logger:
+    def __init__(self):
+        self.data = ""
+
+    def log(self, s):
+        self.data = self.data + s + "\n"
+        print(s)

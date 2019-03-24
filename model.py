@@ -50,3 +50,6 @@ class AchillesModel:
         accr = model.evaluate(test_sequences_matrix, Y_test)
         model.save(SAVE_MODEL_AS.replace("<language>", language), overwrite=MODEL_OVERWRITE)
         print('Test set\n  Loss: {:0.3f}\n  Accuracy: {:0.3f}'.format(accr[0], accr[1]))
+
+
+AchillesModel.train("java")

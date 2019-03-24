@@ -30,8 +30,7 @@ down typing...
 1. Modify the if-statement in the main() method of achilles.py by adding:
     ```
     elif lang == <name of language key>:
-        for file in files:
-            <Name of language key>lect.execute_routine(file)
+        <Name of language key>lect.execute_routine(files)
     ```
 1. Create a <name of language key>lect.py file with the necessary functions
 to transform the code in that language as required by the neural network.

@@ -1,7 +1,7 @@
 import javalang
-import model
-
+from model import *
 from utility import *
+
 
 _primitive_types = {"Literal": "<lit>",
                     "Integer": "<int>",
@@ -48,7 +48,6 @@ def keymap(tokens, clean_primitives=True):
     if clean_primitives:
         sanitize(ls)
     for token in ls:
-        # print(token, i)
         d[token] = i
         i += 1
     return d, {v: k for k, v in d.items()}
@@ -214,10 +213,12 @@ class JavaJuliet:
 
 class Javalect:
     @staticmethod
-    def execute_routine(file):
-        contents = JavaJuliet.java_file_cleaner(file)
-        chunks = chunker(contents)
-        for chunk in chunks:
-            print("Analyzing", file)
-            tokens = tokenize(chunk)
+    def execute_routine(files):
+        f = Logger()
+        for file in files:
+            contents = JavaJuliet.java_file_cleaner(file)
+            chunks = chunker(contents)
+            for chunk in chunks:
+                f.log("Analyzing" + file)
+                tokens = tokenize(chunk)
 
