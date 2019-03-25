@@ -1,10 +1,14 @@
-from javalect import *
-from model import *
 import csv
-from random import shuffle
 import argparse
 import os
 import fnmatch
+from random import shuffle
+from model import *
+
+
+def read_file(path):
+    with open(path, 'r') as content_file:
+        return content_file.read()
 
 
 def get_cmd_args():
@@ -93,11 +97,6 @@ def get_files(path, language="java"):
     return [language] + list(set(ls))
 
 
-def read_file(path):
-    with open(path, 'r') as content_file:
-        return content_file.read()
-
-
 def read_data(polarity, language="java"):
     return read_file("data/" + language + "_" + polarity + ".txt").split("\n\n\n\n\n")
 
@@ -166,3 +165,12 @@ class Stack:
 
     def size(self):
         return len(self.items)
+
+
+class Logger:
+    def __init__(self):
+        self.data = ""
+
+    def log(self, s):
+        self.data = self.data + s + "\n"
+        print(s)

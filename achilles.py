@@ -1,4 +1,3 @@
-from utility import *
 from javalect import *
 import os
 

@@ -1,8 +1,9 @@
 from utility import *
-from model import *
-import javalang
+from constants import *
 import h5py
-import os
+import javalang
+from keras.preprocessing.text import Tokenizer
+
 
 _primitive_types = {"Literal": "<lit>",
                     "Integer": "<int>",
@@ -212,15 +213,6 @@ class JavaJuliet:
         return string
 
 
-class Logger:
-    def __init__(self):
-        self.data = ""
-
-    def log(self, s):
-        self.data = self.data + s + "\n"
-        print(s)
-
-
 class Javalect:
     @staticmethod
     def execute_routine(files):
@@ -228,15 +220,22 @@ class Javalect:
         model = AchillesModel.load_trained_model("java")
         with h5py.File(os.path.curdir + "/" + SAVE_MODEL_AS.replace("<language>", "java"), 'r') as rnn:
             for file in files:
-                f.log("Analyzing" + file)
+                f.log("Analyzing " + file + ":")
                 contents = JavaJuliet.java_file_cleaner(file)
                 for chunk in chunker(contents):
                     tokens = tokenize(chunk)
-                    tokens = " ".join(tokens)
-                    print(tokens)
+                    prog = [" ".join(token.value for token in tokens)]
+                    for x in prog:
+                        print(x)
+
+                    tok = Tokenizer(num_words=MAX_WORDS)
+                    tok.fit_on_texts(prog)
+                    print()
+
+                    print()
                     # x_data = rnn['x_data']
                     # model.predict(x_data)
 
 
-
 Javalect.execute_routine(["Test.java"])
+# print(read_file("Test.java"))
