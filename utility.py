@@ -166,12 +166,3 @@ class Stack:
 
     def size(self):
         return len(self.items)
-
-
-class Logger:
-    def __init__(self):
-        self.data = ""
-
-    def log(self, s):
-        self.data = self.data + s + "\n"
-        print(s)

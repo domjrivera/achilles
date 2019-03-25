@@ -1,7 +1,8 @@
-import javalang
-from model import *
 from utility import *
-
+from model import *
+import javalang
+import h5py
+import os
 
 _primitive_types = {"Literal": "<lit>",
                     "Integer": "<int>",
@@ -211,14 +212,31 @@ class JavaJuliet:
         return string
 
 
+class Logger:
+    def __init__(self):
+        self.data = ""
+
+    def log(self, s):
+        self.data = self.data + s + "\n"
+        print(s)
+
+
 class Javalect:
     @staticmethod
     def execute_routine(files):
         f = Logger()
-        for file in files:
-            contents = JavaJuliet.java_file_cleaner(file)
-            chunks = chunker(contents)
-            for chunk in chunks:
+        model = AchillesModel.load_trained_model("java")
+        with h5py.File(os.path.curdir + "/" + SAVE_MODEL_AS.replace("<language>", "java"), 'r') as rnn:
+            for file in files:
                 f.log("Analyzing" + file)
-                tokens = tokenize(chunk)
+                contents = JavaJuliet.java_file_cleaner(file)
+                for chunk in chunker(contents):
+                    tokens = tokenize(chunk)
+                    tokens = " ".join(tokens)
+                    print(tokens)
+                    # x_data = rnn['x_data']
+                    # model.predict(x_data)
 
+
+
+Javalect.execute_routine(["Test.java"])
