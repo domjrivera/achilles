@@ -225,14 +225,12 @@ class Javalect:
                 for chunk in chunker(contents):
                     tokens = tokenize(chunk)
                     prog = [" ".join(token.value for token in tokens)]
-                    for x in prog:
-                        print(x)
 
-                    tok = Tokenizer(num_words=MAX_WORDS)
-                    tok.fit_on_texts(prog)
-                    print()
+                    # ===============================================================
+                    # Next thing to do is to figure out how to use a Java specific
+                    #     tokenizer for both training and feeding the model.
+                    # ===============================================================
 
-                    print()
                     # x_data = rnn['x_data']
                     # model.predict(x_data)
 

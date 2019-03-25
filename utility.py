@@ -21,11 +21,12 @@ def get_cmd_args():
         print("No compatible files found.")
         quit(0)
     if len(ls) > 100:
-        ans = input("Found " + str((len(ls) - 1)) + " " + ls[0] + " files. Do you want to continue? [y]es, [n]o: ")
-        if "y" in ans.lower():
-            pass
-        else:
-            quit()
+        while True:
+            ans = input("Found " + str((len(ls) - 1)) + " " + ls[0] + " files. Do you want to continue? [y]es, [n]o: ")
+            if "y" == ans.lower():
+                break
+            elif "n" == ans.lower():
+                quit()
     print(version_info)
     return ls[1:], ls[0]
 
@@ -79,7 +80,7 @@ def parse_cmd_args(goals):
                 print("Unable to locate training data: data/" + goals[0] + "_data.csv")
                 quit()
         else:
-            print("Invalid argumentsa.")
+            print("Invalid arguments.")
             quit()
     except:
         quit()
