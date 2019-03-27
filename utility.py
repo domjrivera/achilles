@@ -2,8 +2,8 @@ import csv
 import argparse
 import os
 import fnmatch
-from random import shuffle
 from model import *
+from javalect import Javalect
 
 
 def read_file(path):
@@ -52,6 +52,20 @@ def parse_cmd_args(goals):
             # If there isn't language support, default to Java.
             return ["java", os.getcwd() + goals[0]]
 
+        # Re-process & balance <language>_<polarity>.txt files
+        elif goals[0] == "corpus":
+            try:
+                if goals[1] == "java":
+                    try:
+                        Javalect.prepare_corpus("java", goals[2])
+                    except:
+                        Javalect.prepare_corpus("java", "random")
+                quit()
+            except:
+                print("Invalid arguments.")
+                quit()
+
+
         # Evaluate a file or folder using a specified language.
         elif goals[0].lower() in languages:
             if len(goals) == 2:
@@ -71,8 +85,6 @@ def parse_cmd_args(goals):
                 print("No language support for " + goals[1] + ".")
                 quit(0)
             try:
-                print("Balancing training data.")
-                balance_data("data/" + goals[1] + "_data.csv")
                 print("Training model.")
                 AchillesModel.train(goals[1])
                 quit()
@@ -127,25 +139,6 @@ def generate_data(language="java"):
         writer = csv.writer(f)
         writer.writerows([["input", "label"]] + ls)
     f.close()
-
-
-def balance_data(language="java"):
-    g, b = [], []
-    with open("data/" + language + "_data.csv", 'r') as f:
-        reader = csv.reader(f)
-        for row in reader:
-            if row[1] == "1":
-                b.append(row)
-            elif row[1] == "0":
-                g.append(row)
-    size = min(len(g), len(b))
-    ls = g[0:size] + b[0:size]
-    shuffle(ls)
-    with open("data/" + language + "_" + "balanced_data.csv", 'w') as h:
-        writer = csv.writer(h)
-        writer.writerows([["input", "label"]] + ls)
-    h.close()
-
 
 # Courtesy of interactivepython.org
 class Stack:

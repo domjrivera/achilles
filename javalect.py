@@ -1,7 +1,9 @@
 from utility import *
 from constants import *
-import h5py
 import javalang
+import random
+from random import shuffle
+import h5py
 
 
 _primitive_types = {"Literal": "<lit>",
@@ -237,3 +239,40 @@ class Javalect:
 
                     # x_data = rnn['x_data']
                     # model.predict(x_data)
+
+    @staticmethod
+    def prepare_corpus(language, method_names="preserve"):
+        g = read_data("good", language)
+        b = read_data("bad", language)
+        ls_g, ls_b = [], []
+        for good in g:
+            for chunk in chunker(good):
+                target = flatten(chunk)
+                tokens = target.split(" ")
+                if tokens[0] in ["public", "private"]:
+                    if method_names == "random":
+                        tokens[2] = str(random.randint(1000000, 9999999))
+                    elif method_names == "uniform":
+                        tokens[2] = "someMethod"
+                    target = " ".join(tokens)
+                    ls_g.append([target, "0"])
+                    print([target, "0"])
+        for bad in b:
+            for chunk in chunker(bad):
+                target = flatten(chunk)
+                tokens = target.split(" ")
+                if tokens[0] in ["public", "private"]:
+                    if method_names == "random":
+                        tokens[2] = str(random.randint(1000000, 9999999))
+                    elif method_names == "uniform":
+                        tokens[2] = "someMethod"
+                    target = " ".join(tokens)
+                    ls_b.append([target, "1"])
+                    print([target, "1"])
+        size = min(len(ls_g), len(ls_b))
+        ls = ls_g[:size] + ls_b[:size]
+        shuffle(ls)
+        with open("data/" + language + "_balanced_data.csv", 'w') as h:
+            writer = csv.writer(h)
+            writer.writerows([["input", "label"]] + ls)
+        h.close()
