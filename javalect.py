@@ -2,7 +2,6 @@ from utility import *
 from constants import *
 import h5py
 import javalang
-from keras.preprocessing.text import Tokenizer
 
 
 _primitive_types = {"Literal": "<lit>",
@@ -31,6 +30,11 @@ _blocks = ["enum",
            "while",
            "switch",
            "synchronized"]
+
+
+def flatten(chunk):
+    tokens = tokenize(chunk)
+    return str([" ".join(token.value for token in tokens)][0])
 
 
 def tokenize(contents):
@@ -233,7 +237,3 @@ class Javalect:
 
                     # x_data = rnn['x_data']
                     # model.predict(x_data)
-
-
-Javalect.execute_routine(["Test.java"])
-# print(read_file("Test.java"))
