@@ -39,7 +39,7 @@ C++, Visual Basic, Objective-C, c#, and other languages with punctuations that s
 down typing... 
 1. Modify the if-statement in the main() method of achilles.py by adding:
     ```
-    elif lang == &lt;name of language key&gt;:
+    elif lang == <name of language key>:
         <Name of language key>lect.execute_routine(files)
     ```
 1. Create a &lt;name of language key&gt;lect.py file with the necessary functions
