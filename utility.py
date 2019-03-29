@@ -55,7 +55,7 @@ def parse_cmd_args(goals):
             return ["java", os.getcwd() + goals[0]]
 
         # Re-process & balance <language>_<polarity>.txt files
-        elif goals[0] == "corpus":
+        elif goals[0] == "balance":
             try:
                 if goals[1] == "java":
                     try:

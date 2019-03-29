@@ -18,9 +18,15 @@
  with extensions pertaining to the language specified. If more than 100 compatible files are found, Achilles will 
  prompt the user before continuing.
 
+* `achilles train <language>` - Retrains the model on <language>_balanced_data.csv; this command does not automatically
+ re-balance the training data.
+
+* `achilles balance <language>` - Rebalance raw <language>_good.txt and <language>_bad.txt, generating the
+ <language>_balanced_data.csv used to train the model.
+
 
 ## Building Achilles Support for Other Languages
-Project Achilles was designed with crowdsourcing in mind.
+Project Achilles was designed with crowd-sourcing in mind.
 In theory, adding additional language support should be relatively simple.
 1. Add an entry to the dictionary `languages` such that the key is the name of
 the language, and the value is a list of the possible file extensions for files
