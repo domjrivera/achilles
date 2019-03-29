@@ -6,20 +6,6 @@ from random import shuffle
 import h5py
 
 
-_primitive_types = {"Literal": "<lit>",
-                    "Integer": "<int>",
-                    "DecimalInteger": "<byte>",
-                    "OctalInteger": "<oct>",
-                    "BinaryInteger": "<bint>",
-                    "HexInteger": "<hexint>",
-                    "FloatingPoint": "<float>",
-                    "DecimalFloatingPoint": "<double>",
-                    "HexFloatingPoint": "<hexfloat",
-                    "Boolean": "<bool>",
-                    "Character": "<char>",
-                    "String": "<str>",
-                    "Null": "<null>"}
-
 # Debating whether ENUM should be ignored...
 _blocks = ["enum",
            "finally",
@@ -43,30 +29,17 @@ def tokenize(contents):
     return javalang.tokenizer.tokenize(contents)
 
 
+def get_method_name(flat_string):
+    flat_string = flat_string.split(" ")
+    for x in range(len(flat_string)):
+        if flat_string[x] == "(":
+            return flat_string[x-1]
+
+
 def collect_data(data_path):
     suite = JavaJulietSuite(data_path)
     suite.write_good()
     suite.write_bad()
-
-
-# Maps each token to value uniquely.
-def keymap(tokens, clean_primitives=True):
-    d, i = dict(), 0
-    ls = set([token.value for token in tokens])
-    if clean_primitives:
-        sanitize(ls)
-    for token in ls:
-        d[token] = i
-        i += 1
-    return d, {v: k for k, v in d.items()}
-
-
-def sanitize(token_list):
-    for token in token_list:
-        dtype = str(token.__class__).replace("<class 'javalang.tokenizer.", "").replace("'>", "")
-        if dtype in _primitive_types:
-            token = _primitive_types[dtype]
-    return token_list
 
 
 def is_valid_chunk(s):
@@ -222,23 +195,21 @@ class JavaJuliet:
 class Javalect:
     @staticmethod
     def execute_routine(files):
-        f = Logger()
+        f, results = Logger(), {}
         model = AchillesModel.load_trained_model("java")
         with h5py.File(os.path.curdir + "/" + SAVE_MODEL_AS.replace("<language>", "java"), 'r') as rnn:
             for file in files:
                 f.log("Analyzing " + file + ":")
                 contents = JavaJuliet.java_file_cleaner(file)
                 for chunk in chunker(contents):
-                    tokens = tokenize(chunk)
-                    prog = [" ".join(token.value for token in tokens)]
+                    method = flatten(chunk)
 
-                    # ===============================================================
-                    # Next thing to do is to figure out how to use a Java specific
-                    #     tokenizer for both training and feeding the model.
-                    # ===============================================================
-
-                    # x_data = rnn['x_data']
-                    # model.predict(x_data)
+                    # Filter non-methods from chunks
+                    if method.split(" ")[0] in ["public", "private"]:
+                        focus = "   " + file.rstrip(".java") + "." + get_method_name(method) + "()"
+                        x_data = rnn[method]
+                        print(model.predict(x_data))
+                        results[focus] = ""
 
     @staticmethod
     def prepare_corpus(language, method_names="preserve"):

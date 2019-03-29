@@ -4,6 +4,8 @@ from keras.layers import LSTM, Activation, Dense, Dropout, Input, Embedding
 from keras.models import Model
 from keras.optimizers import RMSprop
 from keras.preprocessing import sequence
+# from keras.callbacks import Callback
+# from sklearn.metrics import confusion_matrix, f1_score, precision_score, recall_score
 from keras.preprocessing.text import Tokenizer
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
@@ -43,8 +45,8 @@ class AchillesModel:
         model = AchillesModel.RNN()
         model.summary()
         model.compile(loss=LOSS_FUNCT, optimizer=RMSprop(), metrics=['accuracy'])
-        model.fit(sequences_matrix, Y_train, batch_size=BATCH_SIZE, epochs=EPOCHS,
-                  validation_split=VALIDATION_SPLIT, callbacks=[EarlyStopping(monitor='val_loss', min_delta=MIN_DELTA)])
+        hist = model.fit(sequences_matrix, Y_train, batch_size=BATCH_SIZE, epochs=EPOCHS,
+                         validation_split=VALIDATION_SPLIT, callbacks=[EarlyStopping(monitor='val_loss', min_delta=MIN_DELTA)])
         test_sequences = tok.texts_to_sequences(X_test)
         test_sequences_matrix = sequence.pad_sequences(test_sequences, maxlen=MAX_LEN)
         accr = model.evaluate(test_sequences_matrix, Y_test)
@@ -56,3 +58,5 @@ class AchillesModel:
         model = AchillesModel.RNN()
         model.load_weights(SAVE_MODEL_AS.replace("<language>", language))
         return model
+
+

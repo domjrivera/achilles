@@ -1,9 +1,9 @@
+from javalect import *
 import csv
 import argparse
 import os
 import fnmatch
 from model import *
-from javalect import Javalect
 
 
 def read_file(path):
@@ -65,7 +65,6 @@ def parse_cmd_args(goals):
                 print("Invalid arguments.")
                 quit()
 
-
         # Evaluate a file or folder using a specified language.
         elif goals[0].lower() in languages:
             if len(goals) == 2:
@@ -114,12 +113,12 @@ def read_data(polarity, language="java"):
     return read_file("data/" + language + "_" + polarity + ".txt").split("\n\n\n\n\n")
 
 
-def flatten(s):
-    s = s.replace("\t", " ")
-    s = s.split("\n")
-    for x in range(len(s)):
-        s[x] = s[x].strip()
-    return " ".join(s)
+# def flatten(s):
+#     s = s.replace("\t", " ")
+#     s = s.split("\n")
+#     for x in range(len(s)):
+#         s[x] = s[x].strip()
+#     return " ".join(s)
 
 
 def generate_data(language="java"):
@@ -139,26 +138,6 @@ def generate_data(language="java"):
         writer = csv.writer(f)
         writer.writerows([["input", "label"]] + ls)
     f.close()
-
-# Courtesy of interactivepython.org
-class Stack:
-    def __init__(self):
-        self.items = []
-
-    def is_empty(self):
-        return self.items == []
-
-    def push(self, item):
-        self.items.append(item)
-
-    def pop(self):
-        return self.items.pop()
-
-    def peek(self):
-        return self.items[len(self.items) - 1]
-
-    def size(self):
-        return len(self.items)
 
 
 class Logger:
