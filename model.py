@@ -4,8 +4,6 @@ from keras.layers import LSTM, Activation, Dense, Dropout, Input, Embedding
 from keras.models import Model
 from keras.optimizers import RMSprop
 from keras.preprocessing import sequence
-# from keras.callbacks import Callback
-# from sklearn.metrics import confusion_matrix, f1_score, precision_score, recall_score
 from keras.preprocessing.text import Tokenizer
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
@@ -53,10 +51,5 @@ class AchillesModel:
         model.save(SAVE_MODEL_AS.replace("<language>", language), overwrite=MODEL_OVERWRITE)
         print('Test set\n  Loss: {:0.3f}\n  Accuracy: {:0.3f}'.format(accr[0], accr[1]))
 
-    @staticmethod
-    def load_trained_model(language):
-        model = AchillesModel.RNN()
-        model.load_weights(SAVE_MODEL_AS.replace("<language>", language))
-        return model
 
-
+# AchillesModel.train("java")

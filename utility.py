@@ -2,6 +2,7 @@ from javalect import *
 import csv
 import argparse
 import os
+import re
 import fnmatch
 from model import *
 
@@ -144,6 +145,25 @@ class Logger:
     def __init__(self):
         self.data = ""
 
+    def log_prediction(self, s, p):
+        self.data = self.data + s + ": " + str(p) + "\n"
+
+        if p < .7:
+            print('{:>18} {:>1}'.format(s + ":", "\x1b[m" + str(p) + "\x1b[m"))
+        elif p <= .7:
+            print('{:>18} {:>1}'.format(s + ":", "\x1b[36m" + str(p) + "\x1b[m"))
+        elif p <= .8:
+            print('{:>18} {:>1}'.format(s + ":", "\x1b[33m" + str(p) + "\x1b[m"))
+        elif p <= .9:
+            print('{:>18} {:>1}'.format(s + ":", "\x1b[31m" + str(p) + "\x1b[m"))
+
     def log(self, s):
-        self.data = self.data + s + "\n"
+        self.data = self.data + Logger.escape_ansi(s) + "\n"
         print(s)
+
+    @staticmethod
+    def escape_ansi(line):
+        ansi_escape = re.compile(r'(\x9B|\x1B\[)[0-?]*[ -\/]*[@-~]')
+        return ansi_escape.sub('', line)
+
+

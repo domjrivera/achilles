@@ -18,7 +18,7 @@ def main():
 
     # Add language support here
     if lang == "java":
-        Javalect.execute_routine(files)
+        Javalect.execute_routine(files, h5_loc)
     else:
         quit()
 

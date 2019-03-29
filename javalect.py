@@ -1,9 +1,9 @@
 from utility import *
-from constants import *
 import javalang
 import random
+import numpy as np
 from random import shuffle
-import h5py
+from keras.models import load_model
 
 
 # Debating whether ENUM should be ignored...
@@ -34,6 +34,14 @@ def get_method_name(flat_string):
     for x in range(len(flat_string)):
         if flat_string[x] == "(":
             return flat_string[x-1]
+
+
+def prepare_flat_method(flat_method):
+    tok = Tokenizer(num_words=MAX_WORDS)
+    texts = np.array([flat_method])
+    test_sequences = tok.texts_to_sequences(texts)
+    test_sequences_matrix = sequence.pad_sequences(test_sequences, maxlen=MAX_LEN)
+    return test_sequences_matrix
 
 
 def collect_data(data_path):
@@ -194,22 +202,23 @@ class JavaJuliet:
 
 class Javalect:
     @staticmethod
-    def execute_routine(files):
+    def execute_routine(files, h5_loc):
         f, results = Logger(), {}
-        model = AchillesModel.load_trained_model("java")
-        with h5py.File(os.path.curdir + "/" + SAVE_MODEL_AS.replace("<language>", "java"), 'r') as rnn:
-            for file in files:
-                f.log("Analyzing " + file + ":")
-                contents = JavaJuliet.java_file_cleaner(file)
-                for chunk in chunker(contents):
-                    method = flatten(chunk)
+        model = load_model(h5_loc)
+        for file in files:
+            f.log("Analyzing " + file + ":")
+            contents = JavaJuliet.java_file_cleaner(file)
+            for chunk in chunker(contents):
+                method = flatten(chunk)
 
-                    # Filter non-methods from chunks
-                    if method.split(" ")[0] in ["public", "private"]:
-                        focus = "   " + file.rstrip(".java") + "." + get_method_name(method) + "()"
-                        x_data = rnn[method]
-                        print(model.predict(x_data))
-                        results[focus] = ""
+                # Filter non-methods from chunks
+                if method.split(" ")[0] in ["public", "private"]:
+                    focus = "   " + file.rstrip(".java") + "." + get_method_name(method) + "()"
+                    x = prepare_flat_method(method)
+                    pred = model.predict(x)[0][0]
+                    f.log_prediction(focus, pred)
+                    results[focus] = ""
+                print()
 
     @staticmethod
     def prepare_corpus(language, method_names="preserve"):
@@ -247,3 +256,4 @@ class Javalect:
             writer = csv.writer(h)
             writer.writerows([["input", "label"]] + ls)
         h.close()
+
