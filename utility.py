@@ -3,8 +3,6 @@ import csv
 import argparse
 import os
 import re
-# import time
-# import calendar
 import datetime
 import fnmatch
 from model import *
@@ -174,5 +172,6 @@ class Logger:
         current = str(datetime.datetime.now())[0:19].replace("-", "_").replace(":", "_").replace(" ", "__") + ".log"
         with open("logs/" + current, "w") as f:
             f.write(self.data)
+        print("\nThe results of this run can be found in ../achilles/logs/" + current)
 
 
