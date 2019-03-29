@@ -218,7 +218,7 @@ class Javalect:
                     pred = model.predict(x)[0][0]
                     f.log_prediction(focus, pred)
                     results[focus] = ""
-                print()
+        f.write()
 
     @staticmethod
     def prepare_corpus(language, method_names="preserve"):
