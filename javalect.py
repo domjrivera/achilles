@@ -215,7 +215,7 @@ class Javalect:
 
                 # Filter non-methods from chunks
                 if method.split(" ")[0] in ["public", "private"]:
-                    focus = "   " + file.rstrip(".java") + "." + get_method_name(method) + "()"
+                    focus = file.rstrip(".java") + "." + get_method_name(method) + "()"
                     x = javal.embed(method)
                     pred = model.predict(x)[0][0]
                     f.log_prediction(focus, pred)

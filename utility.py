@@ -140,8 +140,6 @@ class Logger:
 
     def log_prediction(self, s, p):
         self.data = self.data + ('{:>20} {:>1}'.format(s + ":", str(p))) + "\n"
-        p = 1.0 - p
-
         if p < .7:
             print('{:>20} {:>1}'.format(s + ":", "\x1b[m" + str(p) + "\x1b[m"))
         elif p <= .7:
@@ -161,7 +159,6 @@ class Logger:
         return ansi_escape.sub('', line)
 
     def write(self):
-        # x = calendar.timegm(time.gmtime())
         current = str(datetime.datetime.now())[0:19].replace("-", "_").replace(":", "_").replace(" ", "__") + ".log"
         with open("logs/" + current, "w") as f:
             f.write(self.data)
