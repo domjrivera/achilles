@@ -115,14 +115,6 @@ def read_data(polarity, language="java"):
     return read_file("data/" + language + "_" + polarity + ".txt").split("\n\n\n\n\n")
 
 
-# def flatten(s):
-#     s = s.replace("\t", " ")
-#     s = s.split("\n")
-#     for x in range(len(s)):
-#         s[x] = s[x].strip()
-#     return " ".join(s)
-
-
 def generate_data(language="java"):
     g = read_data("good", language=language)
     b = read_data("bad", language=language)
@@ -148,6 +140,7 @@ class Logger:
 
     def log_prediction(self, s, p):
         self.data = self.data + ('{:>20} {:>1}'.format(s + ":", str(p))) + "\n"
+        p = 1.0 - p
 
         if p < .7:
             print('{:>20} {:>1}'.format(s + ":", "\x1b[m" + str(p) + "\x1b[m"))

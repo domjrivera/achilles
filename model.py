@@ -28,7 +28,7 @@ class AchillesModel:
     @staticmethod
     def train(language):
         df = pd.read_csv('data/' + language + '_balanced_data.csv')
-        X = df.input
+        X = df. input
         Y = df.label
         le = LabelEncoder()
         Y = le.fit_transform(Y)
@@ -51,5 +51,3 @@ class AchillesModel:
         model.save(SAVE_MODEL_AS.replace("<language>", language), overwrite=MODEL_OVERWRITE)
         print('Test set\n  Loss: {:0.3f}\n  Accuracy: {:0.3f}'.format(accr[0], accr[1]))
 
-
-# AchillesModel.train("java")

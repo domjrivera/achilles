@@ -1,9 +1,9 @@
 from utility import *
 import javalang
 import random
-import numpy as np
 from random import shuffle
 from keras.models import load_model
+from keras.preprocessing.text import Tokenizer
 
 
 # Debating whether ENUM should be ignored...
@@ -34,14 +34,6 @@ def get_method_name(flat_string):
     for x in range(len(flat_string)):
         if flat_string[x] == "(":
             return flat_string[x-1]
-
-
-def prepare_flat_method(flat_method):
-    tok = Tokenizer(num_words=MAX_WORDS)
-    texts = np.array([flat_method])
-    test_sequences = tok.texts_to_sequences(texts)
-    test_sequences_matrix = sequence.pad_sequences(test_sequences, maxlen=MAX_LEN)
-    return test_sequences_matrix
 
 
 def collect_data(data_path):
@@ -201,9 +193,19 @@ class JavaJuliet:
 
 
 class Javalect:
+    def __init__(self):
+        self.tok = Tokenizer(num_words=MAX_WORDS)
+        df = pd.read_csv('data/java_balanced_data.csv')
+        self.tok.fit_on_texts(df.input)
+
+    def embed(self, flat_method):
+        sequences = self.tok.texts_to_sequences([flat_method])
+        sequences_matrix = sequence.pad_sequences(sequences, maxlen=MAX_LEN)
+        return sequences_matrix
+
     @staticmethod
     def execute_routine(files, h5_loc):
-        f, results = Logger(), {}
+        f, javal = Logger(), Javalect()
         model = load_model(h5_loc)
         for file in files:
             f.log("Analyzing " + file + ":")
@@ -214,10 +216,9 @@ class Javalect:
                 # Filter non-methods from chunks
                 if method.split(" ")[0] in ["public", "private"]:
                     focus = "   " + file.rstrip(".java") + "." + get_method_name(method) + "()"
-                    x = prepare_flat_method(method)
+                    x = javal.embed(method)
                     pred = model.predict(x)[0][0]
                     f.log_prediction(focus, pred)
-                    results[focus] = ""
         f.write()
 
     @staticmethod
@@ -256,4 +257,3 @@ class Javalect:
             writer = csv.writer(h)
             writer.writerows([["input", "label"]] + ls)
         h.close()
-
