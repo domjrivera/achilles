@@ -1,9 +1,10 @@
+
 # ================[Hyperparameters]=================
 TEST_SIZE = 0.1
 MAX_WORDS = 1000
 MAX_LEN = 150
 EPOCHS = 10
-BATCH_SIZE = 32
+BATCH_SIZE = 128
 VALIDATION_SPLIT = 0.2
 MIN_DELTA = 0.0001
 DROPOUT_RATE = 0.5

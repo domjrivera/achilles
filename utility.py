@@ -139,15 +139,18 @@ class Logger:
         self.data = ""
 
     def log_prediction(self, s, p):
-        self.data = self.data + ('{:>20} {:>1}'.format(s + ":", str(p))) + "\n"
-        if p < .7:
-            print('{:>20} {:>1}'.format(s + ":", "\x1b[m" + str(p) + "\x1b[m"))
+        if p < 0.001:
+            p = "\x1b[m" + "00.0" + "%\x1b[m"
+        elif p < .6:
+            p = "\x1b[m" + str(p*100)[0:4] + "%\x1b[m"
         elif p <= .7:
-            print('{:>20} {:>1}'.format(s + ":", "\x1b[36m" + str(p) + "\x1b[m"))
+            p = "\x1b[36m" + str(p*100)[0:4] + "%\x1b[m"
         elif p <= .8:
-            print('{:>20} {:>1}'.format(s + ":", "\x1b[33m" + str(p) + "\x1b[m"))
-        elif p <= .9:
-            print('{:>20} {:>1}'.format(s + ":", "\x1b[31m" + str(p) + "\x1b[m"))
+            p = "\x1b[33m" + str(p*100)[0:4] + "%\x1b[m"
+        elif p >= .9:
+            p = "\x1b[31m" + str(p*100)[0:4] + "%\x1b[m"
+        print('{:>20} {:>1}'.format(s + ":", p))
+        self.data = self.data + ('{:>20} {:>1}'.format(s + ":", Logger.escape_ansi(p))) + "\n"
 
     def log(self, s):
         self.data = self.data + Logger.escape_ansi(s) + "\n"

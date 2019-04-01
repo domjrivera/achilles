@@ -52,4 +52,4 @@ class AchillesModel:
         print('Test set\n  Loss: {:0.3f}\n  Accuracy: {:0.3f}'.format(accr[0], accr[1]))
 
 
-AchillesModel.train("java")
+# AchillesModel.train("java")
