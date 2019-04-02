@@ -172,4 +172,3 @@ class Logger:
             f.write(self.data)
         print("\nThe results of this run can be found in " + os.path.dirname(__file__) + "/achilles/logs/" + current)
 
-

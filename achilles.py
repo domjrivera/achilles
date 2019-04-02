@@ -4,29 +4,23 @@ import os
 
 def main():
     # files, lang = get_cmd_args()
-    # files, lang = [os.path.dirname(__file__) + "/" + "Test.java"], "java"  # Use while testing
-    #
-    # h5_loc = os.path.dirname(__file__) + "/" + SAVE_MODEL_AS.replace("<language>", lang)
-    # if not os.path.isfile(h5_loc):
-    #     print("Unable to locate a trained " + lang + " model.\nTrain the model using " + lang +
-    #           "-specific data with \x1b[33machilles train " + lang + "\x1b[m.")
-    #     quit()
-    #
-    # print("\x1b[36mEvaluating " + str(len(files)) + " files:\x1b[m")
-    # for file in files:
-    #     print("  ", file)
-    #
-    # # Add language support here
-    # if lang == "java":
-    #     Javalect.execute_routine(files, h5_loc)
-    # else:
-    #     quit()
-    # Javalect.scrape_corpus("/Users/Strickolas/Downloads/chunk0", write_loc="<polarity>_0.txt")
-    # Javalect.scrape_corpus("/Users/Strickolas/Downloads/chunk1", write_loc="<polarity>_1.txt")
-    # Javalect.scrape_corpus("/Users/Strickolas/Downloads/chunk2", write_loc="<polarity>_2.txt")
-    # Javalect.scrape_corpus("/Users/Strickolas/Downloads/chunk3", write_loc="<polarity>_3.txt")
-    Javalect.scrape_corpus("/Users/Strickolas/Downloads/chunk4", write_loc="<polarity>_4.txt")
+    files, lang = [os.path.dirname(__file__) + "/" + "Test.java"], "java"  # Use while testing
 
+    h5_loc = os.path.dirname(__file__) + "/" + SAVE_MODEL_AS.replace("<language>", lang)
+    if not os.path.isfile(h5_loc):
+        print("Unable to locate a trained " + lang + " model.\nTrain the model using " + lang +
+              "-specific data with \x1b[33machilles train " + lang + "\x1b[m.")
+        quit()
+
+    print("\x1b[36mEvaluating " + str(len(files)) + " files:\x1b[m")
+    for file in files:
+        print("  ", file)
+
+    # Add language support here
+    if lang == "java":
+        Javalect.execute_routine(files, h5_loc)
+    else:
+        quit()
 
 if __name__ == "__main__":
     main()
