@@ -7,6 +7,7 @@ from keras.preprocessing import sequence
 from keras.preprocessing.text import Tokenizer
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
+import os
 
 from constants import *
 
@@ -27,7 +28,7 @@ class AchillesModel:
 
     @staticmethod
     def train(language):
-        df = pd.read_csv('data/' + language + '_balanced_data.csv')
+        df = pd.read_csv(os.path.dirname(__file__) + '/data/' + language + '_balanced_data.csv')
         X = df. input
         Y = df.label
         le = LabelEncoder()
@@ -48,8 +49,8 @@ class AchillesModel:
         test_sequences = tok.texts_to_sequences(X_test)
         test_sequences_matrix = sequence.pad_sequences(test_sequences, maxlen=MAX_LEN)
         accr = model.evaluate(test_sequences_matrix, Y_test)
-        model.save(SAVE_MODEL_AS.replace("<language>", language), overwrite=MODEL_OVERWRITE)
-        print('Test set\n  Loss: {:0.3f}\n  Accuracy: {:0.3f}'.format(accr[0], accr[1]))
+        model.save(os.path.dirname(__file__) + "/" + SAVE_MODEL_AS.replace("<language>", language), overwrite=MODEL_OVERWRITE)
+        print('Test set\n  Loss: {:0.3f}\n  Accuracy: {:0.3f}\n'.format(accr[0], accr[1]))
 
 
 # AchillesModel.train("java")

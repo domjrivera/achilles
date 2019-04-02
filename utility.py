@@ -1,11 +1,11 @@
 from javalect import *
+from model import *
+import os
 import csv
 import argparse
-import os
 import re
 import datetime
 import fnmatch
-from model import *
 
 
 def read_file(path):
@@ -112,7 +112,7 @@ def get_files(path, language="java"):
 
 
 def read_data(polarity, language="java"):
-    return read_file("data/" + language + "_" + polarity + ".txt").split("\n\n\n\n\n")
+    return read_file(os.path.dirname(__file__) + "/data/" + language + "_" + polarity + ".txt").split("\n\n\n\n\n")
 
 
 def generate_data(language="java"):
@@ -128,7 +128,7 @@ def generate_data(language="java"):
         if len(f) > 0:
             ls.append([f, 1])
 
-    with open("data/" + language + "_" + "data.csv", 'w') as f:
+    with open(os.path.dirname(__file__) + "/data/" + language + "_" + "data.csv", 'w') as f:
         writer = csv.writer(f)
         writer.writerows([["input", "label"]] + ls)
     f.close()
@@ -140,9 +140,11 @@ class Logger:
 
     def log_prediction(self, s, p):
         if p < 0.001:
-            p = "\x1b[m" + "00.0" + "%\x1b[m"
+            p = "\x1b[m" + " 0.0" + "%\x1b[m"
         elif p < .6:
-            p = "\x1b[m" + str(p*100)[0:4] + "%\x1b[m"
+            p = str(p*100)[0:4]
+            if int(p) < 10:
+                p = " " + p
         elif p <= .7:
             p = "\x1b[36m" + str(p*100)[0:4] + "%\x1b[m"
         elif p <= .8:
@@ -158,13 +160,16 @@ class Logger:
 
     @staticmethod
     def escape_ansi(line):
-        ansi_escape = re.compile(r'(\x9B|\x1B\[)[0-?]*[ -\/]*[@-~]')
-        return ansi_escape.sub('', line)
+        try:
+            ansi_escape = re.compile(r'(\x9B|\x1B\[)[0-?]*[ -\/]*[@-~]')
+            return ansi_escape.sub('', line)
+        except:
+            return line[8:-8]
 
     def write(self):
         current = str(datetime.datetime.now())[0:19].replace("-", "_").replace(":", "_").replace(" ", "__") + ".log"
-        with open("logs/" + current, "w") as f:
+        with open(os.path.dirname(__file__) + "/logs/" + current, "w") as f:
             f.write(self.data)
-        print("\nThe results of this run can be found in ../achilles/logs/" + current)
+        print("\nThe results of this run can be found in " + os.path.dirname(__file__) + "/achilles/logs/" + current)
 
 

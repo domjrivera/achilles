@@ -82,10 +82,11 @@ def chunker(contents):
 
 
 class JavaJulietSuite:
-    def __init__(self, test_suite_location):
-        list_of_paths = get_files(test_suite_location)[1:]
+    def __init__(self, test_suite_location, ):
+        list_of_paths = get_files(test_suite_location, "java")[1:]
         self.files = []
         for path in list_of_paths:
+            print(path)
             self.files.append(JavaJuliet(path))
 
     def get_good(self):
@@ -195,7 +196,7 @@ class JavaJuliet:
 class Javalect:
     def __init__(self):
         self.tok = Tokenizer(num_words=MAX_WORDS)
-        df = pd.read_csv('data/java_balanced_data.csv')
+        df = pd.read_csv(os.path.dirname(__file__) + '/data/java_balanced_data.csv')
         self.tok.fit_on_texts(df.input)
 
     def embed(self, flat_method):
@@ -208,17 +209,20 @@ class Javalect:
         f, javal = Logger(), Javalect()
         model = load_model(h5_loc)
         for file in files:
-            f.log("Analyzing " + file + ":")
-            contents = JavaJuliet.java_file_cleaner(file)
-            for chunk in chunker(contents):
-                method = flatten(chunk)
+            try:
+                f.log("Analyzing " + file + ":")
+                contents = JavaJuliet.java_file_cleaner(file)
+                for chunk in chunker(contents):
+                    method = flatten(chunk)
 
-                # Filter non-methods from chunks
-                if method.split(" ")[0] in ["public", "private"]:
-                    focus = file.rstrip(".java") + "." + get_method_name(method) + "()"
-                    x = javal.embed(method)
-                    pred = model.predict(x)[0][0]
-                    f.log_prediction(focus, pred)
+                    # Filter non-methods from chunks
+                    if method.split(" ")[0] in ["public", "private"]:
+                        focus = " " + get_method_name(method) + "()"
+                        x = javal.embed(method)
+                        pred = model.predict(x)[0][0]
+                        f.log_prediction(focus, pred)
+            except:
+                pass
         f.write()
 
     @staticmethod
@@ -253,7 +257,13 @@ class Javalect:
         size = min(len(ls_g), len(ls_b))
         ls = ls_g[:size] + ls_b[:size]
         shuffle(ls)
-        with open("data/" + language + "_balanced_data.csv", 'w') as h:
+        with open(os.path.dirname(__file__) + "/data/" + language + "_balanced_data.csv", 'w') as h:
             writer = csv.writer(h)
             writer.writerows([["input", "label"]] + ls)
         h.close()
+
+    @staticmethod
+    def scrape_corpus(test_suite_location, write_loc="<poliarty>.txt"):
+        jjs = JavaJulietSuite(test_suite_location)
+        jjs.write_good(write_loc.replace("<polarity>", "good"))
+        jjs.write_bad(write_loc.replace("<polarity>", "bad"))

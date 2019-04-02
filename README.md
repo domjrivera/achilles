@@ -3,7 +3,6 @@
 
 # Todo
 1. Get F1-Score, Accuracy & Precision of Model
-1. Format input data to make predictions
 
 ### Just Add Water!
 1. Download the [NIST Juliet Stand-alone Suite for Java](https://samate.nist.gov/SRD/testsuites/juliet/Juliet_Test_Suite_v1.3_for_Java.zip).

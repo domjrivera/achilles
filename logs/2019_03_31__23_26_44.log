@@ -1,0 +1,19 @@
+Analyzing /Volumes/CoreBlue/Programming/Projects/mazeworks/src/com/strickolas/mazeworks/structures/Maze.java:
+Analyzing /Volumes/CoreBlue/Programming/Projects/mazeworks/src/com/strickolas/mazeworks/structures/Point.java:
+Analyzing /Volumes/CoreBlue/Programming/Projects/mazeworks/src/com/strickolas/mazeworks/Main.java:
+             main(): 72.9%
+Analyzing /Volumes/CoreBlue/Programming/Projects/mazeworks/src/com/strickolas/mazeworks/util/color/Color.java:
+Analyzing /Volumes/CoreBlue/Programming/Projects/mazeworks/src/com/strickolas/mazeworks/util/StringUtils.java:
+           repeat(): 75.1%
+Analyzing /Volumes/CoreBlue/Programming/Projects/mazeworks/src/com/strickolas/mazeworks/util/UserInput.java:
+           getInt(): 66.3%
+Analyzing /Volumes/CoreBlue/Programming/Projects/mazeworks/src/com/strickolas/mazeworks/entities/Player.java:
+Analyzing /Volumes/CoreBlue/Programming/Projects/mazeworks/src/com/strickolas/mazeworks/util/color/ColorInjector.java:
+            Black(): 61.8%
+              Red(): 61.8%
+            Green(): 61.8%
+           Yellow(): 61.8%
+             Blue(): 61.8%
+          Magenta(): 61.8%
+             Cyan(): 61.8%
+            White(): 61.8%
