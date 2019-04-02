@@ -1,4 +1,5 @@
 Analyzing /Volumes/CoreBlue/Programming/Projects/achilles/Test.java:
              main():  0.0%
+             boop(): 99.8%
              good():  0.0%
-              bad(): 94.2%
+              bad(): 91.2%
