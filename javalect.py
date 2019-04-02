@@ -226,7 +226,7 @@ class Javalect:
         f.write()
 
     @staticmethod
-    def prepare_corpus(language, method_names="preserve"):
+    def prepare_corpus(language, method_names="preserve", mode="w"):
         g = read_data("good", language)
         b = read_data("bad", language)
         ls_g, ls_b = [], []
@@ -257,7 +257,7 @@ class Javalect:
         size = min(len(ls_g), len(ls_b))
         ls = ls_g[:size] + ls_b[:size]
         shuffle(ls)
-        with open(os.path.dirname(__file__) + "/data/" + language + "_balanced_data.csv", 'w') as h:
+        with open(os.path.dirname(__file__) + "/data/" + language + "_balanced_data.csv", mode) as h:
             writer = csv.writer(h)
             writer.writerows([["input", "label"]] + ls)
         h.close()
