@@ -2,9 +2,11 @@ from javalect import *
 import os
 
 
-def main():
-    files, lang = get_cmd_args()
-    # files, lang = [os.path.dirname(__file__) + "/" + "Test.java"], "java"  # Use while testing
+def main(testing):
+    if testing:
+        files, lang = [os.path.dirname(__file__) + "/" + "Test.java"], "java"
+    else:
+        files, lang = get_cmd_args()
 
     h5_loc = os.path.dirname(__file__) + "/" + SAVE_MODEL_AS.replace("<language>", lang)
     if not os.path.isfile(h5_loc):
@@ -24,4 +26,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(testing=True)

@@ -46,6 +46,14 @@ https://www.kaggle.com/kredy10/simple-lstm-for-text-classification/notebook
 1. Get F1-Score, Accuracy & Precision of Model
 
 ## achilles.py
+This file serves as the entry point for the Achilles tool. If you wish to run Achilles in an IDE on a dummy Java file,
+make sure to change the parameter in the main invoking method.
+```python
+if __name__ == "__main__":
+    main(testing=True)
+```
+While `testing=True`, Achilles will point to Test.java in the relative directory. When you are ready to deploy, or call
+Achilles from command line, change `testing=False`.
 
 ## contants.py
 
