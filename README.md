@@ -1,7 +1,7 @@
-## [WIP]Project Achilles - A Static Source Code Vulnerability Identifier Using LSTMs and Magic
+## [WIP]Project Achilles - A Static Source Code Vulnerability Identifier Using LSTMs
 ![Achilles](assets/logo.jpg)
 
-# Calling Achilles from the Terminal
+## Calling Achilles from the Terminal
 In your terminal `nano ~/.bash_profile`, then add the line `alias achilles="python3 <path-to-achilles.py>"`
 * `achilles <file>` - Achilles will attempt to automatically decide the language to use based on the file extension. 
 
@@ -18,7 +18,7 @@ In your terminal `nano ~/.bash_profile`, then add the line `alias achilles="pyth
  <language>_balanced_data.csv used to train the model.
 
 
-# Building Achilles Support for Other Languages
+## Building Achilles Support for Other Languages
 Project Achilles was designed with crowd-sourcing in mind.
 In theory, adding additional language support should be relatively simple.
 1. Add an entry to the dictionary `languages` such that the key is the name of
