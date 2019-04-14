@@ -71,29 +71,29 @@ important to keep this in mind.
 * `get_method_name(flat_string)` - extracts the name of the method from a flattened chunk. The method name is used for display the results to the user.
 * `collect_data(data_path)` - extracts the good and bad method data from the Java Juliet Suite from the specified `data_path` and writes it to the data/ directory.
 * `is_valid_chunk(s)` - uses the `_blocks` variable to determine if a chunk should be discarded or not. This ensures that we extract the entire method and not just all the blocks within the methods.
-* `chunker(contents)` - extracts methods from the contents of a Java file.
+* `chunker(contents)` - extracts methods from the contents of a Java file. <br/>
 
 * `JavaJulietSuite.__init__(self, test_suite_location)` - constructor; encapsulates an entire Juliet Suite, stores several JavaJuliet objects.
 * `JavaJulietSuite.get_good(self)` - extracts "good" methods from a list of JavaJuliet objects.
 * `JavaJulietSuite.get_bad(self)` - extracts "bad" methods from a list of JavaJuliet objects.
-* `JavaJulietSuite.get_chunks(self)` -
-* `JavaJulietSuite.write_good(self, location="good.txt")` -
-* `JavaJulietSuite.write_bad(self, location="bad.txt")` -
+* `JavaJulietSuite.get_chunks(self)` - extracts all methods form a list of JavaJuliet objects.
+* `JavaJulietSuite.write_good(self, location="good.txt")` - writes all "good" methods.
+* `JavaJulietSuite.write_bad(self, location="bad.txt")` - writes all "bad" methods. <br/>
 
-* `JavaJuliet.__init__(self, path)` -
-* `JavaJuliet.__str__(self)` -
-* `JavaJuliet.chunks(self)` -
-* `JavaJuliet.good_bad_separator(self)` -
-* `JavaJuliet.java_file_cleaner(file_loc)` -
-* `JavaJuliet._comment_stripper(string)` -
-* `JavaJuliet._crush(string)` -
-* `JavaJuliet._allman_to_knr(string)` -
+* `JavaJuliet.__init__(self, path)` - constructor; represents a single Juliet file, and contains a list of "good" chunks and "bad" chunks.
+* `JavaJuliet.__str__(self)` - string representation of a single Juliet file.
+* `JavaJuliet.chunks(self)` - returns a list of chunks from within the file.
+* `JavaJuliet.good_bad_separator(self)` - splits a list of chunks into two distinct lists of "good" and "bad" chunks.
+* `JavaJuliet.java_file_cleaner(file_loc)` - calls the helper methods: _comment_stripper, _crush, _allman_to_knr atomically.
+* `JavaJuliet._comment_stripper(string)` - strips comments form the Juliet file.
+* `JavaJuliet._crush(string)` - flatten a string.
+* `JavaJuliet._allman_to_knr(string)` - converts a file from Allman to K&R. *If a file is not in K&R, it will be improperly parsed* <br/>
 
-* `Javalect.__init__(self)` -
-* `Javalect.embed(self, flat_method)` -
-* `Javalect.execute_routine(files, h5_loc, log_write=False)` -
-* `Javalect.prepare_corpus(language, method_names="preserve", mode="w")` -
-* `Javalect.scrape_corpus(test_suite_location, write_loc="<poliarty>.txt")` -
+* `Javalect.__init__(self)` - constructor; initializes a keras.preprocessing.text tokenizer with the balanced data csv.
+* `Javalect.embed(self, flat_method)` - embeds a vector of tokens to a higher dimension.
+* `Javalect.execute_routine(files, h5_loc, log_write=False)` - traverse a list of files to be evaluated, loads in Keras h5 model save, and generates a prediction.
+* `Javalect.prepare_corpus(language, method_names="preserve", mode="w")` - ingests java_bad.txt and java_good.txt, processes the corpus, and writes a **balanced** data set.
+* `Javalect.scrape_corpus(test_suite_location, write_loc="<poliarty>.txt")` - repopulates good.txt and bad.txt. You ideally would use this if you add more Java classes to a raw data directory.
 
 ## model.py
 * `AchillesModel.RNN()` -
