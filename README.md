@@ -45,9 +45,9 @@ Follow the conventions in achilles.py as a guide.
 1. Get F1-Score, Accuracy & Precision of Model
 
 ## Terminology
-`polarity` - good or bad; e.g. vulnerable or not vulnerable
-`language` - the name of the language as described in constants.py -> languages
-`chunk` - a method or function; every chunk is a block structure but not every block structure is a chunk.
+* `polarity` - good or bad; e.g. vulnerable or not vulnerable
+* `language` - the name of the language as described in constants.py -> languages
+* `chunk` - a method or function; every chunk is a block structure but not every block structure is a chunk.
 
 ## achilles.py
 This file serves as the entry point for the Achilles tool. If you wish to run Achilles in an IDE on a dummy Java file,
