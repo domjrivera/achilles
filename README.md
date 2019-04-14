@@ -1,8 +1,8 @@
 ## [WIP]Project Achilles - A Static Source Code Vulnerability Identifier Using LSTMs and Magic
 ![Achilles](assets/logo.jpg)
 
-### Calling Achilles from the Terminal
-In your terminal `nano `~/.bash_profile`, then add the line `alias achilles="python3 <path-to-achilles.py>"`
+# Calling Achilles from the Terminal
+In your terminal `nano ~/.bash_profile`, then add the line `alias achilles="python3 <path-to-achilles.py>"`
 * `achilles <file>` - Achilles will attempt to automatically decide the language to use based on the file extension. 
 
 * `achilles <language> <file>` - Intended for use with source code that may have an obscure file extension.
@@ -17,11 +17,8 @@ In your terminal `nano `~/.bash_profile`, then add the line `alias achilles="pyt
 * `achilles balance <language>` - Rebalance raw <language>_good.txt and <language>_bad.txt, generating the
  <language>_balanced_data.csv used to train the model.
 
-# Todo
-1. Get F1-Score, Accuracy & Precision of Model
 
-
-## Building Achilles Support for Other Languages
+# Building Achilles Support for Other Languages
 Project Achilles was designed with crowd-sourcing in mind.
 In theory, adding additional language support should be relatively simple.
 1. Add an entry to the dictionary `languages` such that the key is the name of
@@ -43,3 +40,18 @@ to transform the code in that language as required by the neural network.
 Follow the conventions in achilles.py as a guide.
 
 https://www.kaggle.com/kredy10/simple-lstm-for-text-classification/notebook
+
+# Litterarum Ad Nauseam
+## Todo
+1. Get F1-Score, Accuracy & Precision of Model
+
+## achilles.py
+
+## contants.py
+
+## javalect.py
+
+## model.py
+
+## utility.py
+
