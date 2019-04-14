@@ -39,11 +39,15 @@ down typing...
 to transform the code in that language as required by the neural network.
 Follow the conventions in achilles.py as a guide.
 
-https://www.kaggle.com/kredy10/simple-lstm-for-text-classification/notebook
 
 # Litterarum Ad Nauseam
 ## Todo
 1. Get F1-Score, Accuracy & Precision of Model
+
+## Terminology
+`polarity` - good or bad; e.g. vulnerable or not vulnerable
+`language` - the name of the language as described in constants.py -> languages
+`chunk` - a method or function; every chunk is a block structure but not every block structure is a chunk.
 
 ## achilles.py
 This file serves as the entry point for the Achilles tool. If you wish to run Achilles in an IDE on a dummy Java file,
@@ -96,20 +100,21 @@ important to keep this in mind.
 * `Javalect.scrape_corpus(test_suite_location, write_loc="<poliarty>.txt")` - repopulates good.txt and bad.txt. You ideally would use this if you add more Java classes to a raw data directory.
 
 ## model.py
-* `AchillesModel.RNN()` -
-* `AchillesModel.train()` -
+The model used is equivalent to the model from [this Kaggle Kernel](https://www.kaggle.com/kredy10/simple-lstm-for-text-classification/notebook).
+* `AchillesModel.RNN()` - initializes a LSTM-RNN.
+* `AchillesModel.train()` - trains the LSTM-RNN.
 
 ## utility.py
-* `read_file(path)` -
-* `get_cmd_args()` -
-* `find_occurrences(s, ch)` -
-* `parse_cmd_args(goals)` -
-* `get_files(path, language="java")` -
-* `read_data(polarity, language="java")` -
-* `generate_data(language="java")` -
+* `read_file(path)` - returns the contents of a file.
+* `get_cmd_args()` - parses the command line args. If more than 100 files are recovered for Achilles to examine, it will ask the user if they wish to continue.
+* `find_occurrences(s, ch)` - helper function; used to find the occurrences of characters in a string.
+* `parse_cmd_args(goals)` - calls the appropriate function based on what was fed to Achilles form the command line.
+* `get_files(path, language="java")` - recursively traverses `path` and extracts any file locations that contain extensions also found in languages[`language`].
+* `read_data(polarity, language="java")` - reads and separates chunks of a certain language and polarity.
+* `generate_data(language="java")` - generates an unbalanced csv containing both good and bad chunks of a certain language.
 
-* `Logger.__init__(self)` -
-* `Logger.log_prediction(self, s, p)` -
-* `Logger.log(self, s)` -
-* `Logger.escape_ansi(line)` -
-* `Logger.write(self)` -
+* `Logger.__init__(self)` - constructor; a simple logger that makes it easy to print colorful outputs and write those outputs to a text file.
+* `Logger.log_prediction(self, s, p)` - writes the name of the method, followed by the prediction metric.
+* `Logger.log(self, s)` - prints and logs a string.
+* `Logger.escape_ansi(line)` - removes ANSI-color encoding form a string.
+* `Logger.write(self)` - writes a log to a text file with the encoded datetime as the filename.
