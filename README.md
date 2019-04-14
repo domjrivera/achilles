@@ -1,14 +1,8 @@
-## [WIP]Project Achilles - A Static Source Code Vulnerability Identifier
+## [WIP]Project Achilles - A Static Source Code Vulnerability Identifier Using LSTMs and Magic
 ![Achilles](assets/logo.jpg)
 
-# Todo
-1. Get F1-Score, Accuracy & Precision of Model
-
-### Just Add Water!
-1. Download the [NIST Juliet Stand-alone Suite for Java](https://samate.nist.gov/SRD/testsuites/juliet/Juliet_Test_Suite_v1.3_for_Java.zip).
-
-
-### Using Achilles from the Terminal
+### Calling Achilles from the Terminal
+In your terminal `nano `~/.bash_profile`, then add the line `alias achilles="python3 <path-to-achilles.py>"`
 * `achilles <file>` - Achilles will attempt to automatically decide the language to use based on the file extension. 
 
 * `achilles <language> <file>` - Intended for use with source code that may have an obscure file extension.
@@ -22,6 +16,9 @@
 
 * `achilles balance <language>` - Rebalance raw <language>_good.txt and <language>_bad.txt, generating the
  <language>_balanced_data.csv used to train the model.
+
+# Todo
+1. Get F1-Score, Accuracy & Precision of Model
 
 
 ## Building Achilles Support for Other Languages

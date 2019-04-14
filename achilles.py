@@ -3,8 +3,8 @@ import os
 
 
 def main():
-    # files, lang = get_cmd_args()
-    files, lang = [os.path.dirname(__file__) + "/" + "Test.java"], "java"  # Use while testing
+    files, lang = get_cmd_args()
+    # files, lang = [os.path.dirname(__file__) + "/" + "Test.java"], "java"  # Use while testing
 
     h5_loc = os.path.dirname(__file__) + "/" + SAVE_MODEL_AS.replace("<language>", lang)
     if not os.path.isfile(h5_loc):

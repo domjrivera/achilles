@@ -205,7 +205,7 @@ class Javalect:
         return sequences_matrix
 
     @staticmethod
-    def execute_routine(files, h5_loc):
+    def execute_routine(files, h5_loc, log_write=False):
         f, javal = Logger(), Javalect()
         model = load_model(h5_loc)
         for file in files:
@@ -223,7 +223,8 @@ class Javalect:
                         f.log_prediction(focus, pred)
             except:
                 pass
-        f.write()
+        if log_write:
+            f.write()
 
     @staticmethod
     def prepare_corpus(language, method_names="preserve", mode="w"):

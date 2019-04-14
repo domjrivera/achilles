@@ -1,0 +1,13 @@
+Analyzing ./structures/Maze.java:
+Analyzing ./util/color/ColorInjector.java:
+Analyzing ./entities/Player.java:
+           Player(): 76.9%
+Analyzing ./Main.java:
+             main(): 99.9%
+       printTitle():  0.0%
+Analyzing ./util/UserInput.java:
+           getInt(): 77.7%
+Analyzing ./util/color/Color.java:
+Analyzing ./structures/Point.java:
+Analyzing ./util/StringUtils.java:
+           repeat(): 76.1%

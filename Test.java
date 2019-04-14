@@ -14,19 +14,6 @@ class Test {
         }
     }
 
-    private void good() throws Throwable {
-        byte data;
-        if (privateFive == 4) {
-            data = 3;
-        }
-        if (privateFive == 5) {
-            if (data < 0) {
-                byte result = (byte) (data * 2);
-                IO.writeLine("result: " + result);
-            }
-        }
-    }
-
     public void bad(HttpServletRequest request, HttpServletResponse response) throws Throwable {
         String data;
         data = "";
