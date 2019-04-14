@@ -66,15 +66,16 @@ important to keep this in mind.
 
 
 ## javalect.py
-* `flatten(chunk)` -
-* `tokenize(contents)` -
-* `get_method_name(flat_string)` -
-* `collect_data(data_path)` -
-* `is_valid_chunk(s)` -
-* `chunker(contents)` -
-* `JavaJulietSuite.__init__(self, test_suite_location)` -
-* `JavaJulietSuite.get_good(self)` -
-* `JavaJulietSuite.get_bad(self)` -
+* `flatten(chunk)` - returns a space delimited string tokenized by the Javalang tokenizer.
+* `tokenize(contents)` - tokenizer; because javalang.tokenizer.tokenize(contents) was too verbose.
+* `get_method_name(flat_string)` - extracts the name of the method from a flattened chunk. The method name is used for display the results to the user.
+* `collect_data(data_path)` - extracts the good and bad method data from the Java Juliet Suite from the specified `data_path` and writes it to the data/ directory.
+* `is_valid_chunk(s)` - uses the `_blocks` variable to determine if a chunk should be discarded or not. This ensures that we extract the entire method and not just all the blocks within the methods.
+* `chunker(contents)` - extracts methods from the contents of a Java file.
+
+* `JavaJulietSuite.__init__(self, test_suite_location)` - constructor; encapsulates an entire Juliet Suite, stores several JavaJuliet objects.
+* `JavaJulietSuite.get_good(self)` - extracts "good" methods from a list of JavaJuliet objects.
+* `JavaJulietSuite.get_bad(self)` - extracts "bad" methods from a list of JavaJuliet objects.
 * `JavaJulietSuite.get_chunks(self)` -
 * `JavaJulietSuite.write_good(self, location="good.txt")` -
 * `JavaJulietSuite.write_bad(self, location="bad.txt")` -
