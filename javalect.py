@@ -82,7 +82,7 @@ def chunker(contents):
 
 
 class JavaJulietSuite:
-    def __init__(self, test_suite_location, ):
+    def __init__(self, test_suite_location):
         list_of_paths = get_files(test_suite_location, "java")[1:]
         self.files = []
         for path in list_of_paths:

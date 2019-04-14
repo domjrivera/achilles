@@ -55,11 +55,60 @@ if __name__ == "__main__":
 While `testing=True`, Achilles will point to Test.java in the relative directory. When you are ready to deploy, or call
 Achilles from command line, change `testing=False`.
 
+
 ## contants.py
+* Several hyperparameters used by the LSTM model
+* `SAVE_MODEL_AS` - the save location of the model
+* `version_info` and `__version__ ` - Displayed when Achilles is invoked.
+* `languages` - a dictionary containing the name of the language as the key, and a list of extensions used by that
+language as the value. The key of this dictionary will become how that language is referred to by Achilles. It is *very*
+important to keep this in mind.
+
 
 ## javalect.py
+* `flatten(chunk)` -
+* `tokenize(contents)` -
+* `get_method_name(flat_string)` -
+* `collect_data(data_path)` -
+* `is_valid_chunk(s)` -
+* `chunker(contents)` -
+* `JavaJulietSuite.__init__(self, test_suite_location)` -
+* `JavaJulietSuite.get_good(self)` -
+* `JavaJulietSuite.get_bad(self)` -
+* `JavaJulietSuite.get_chunks(self)` -
+* `JavaJulietSuite.write_good(self, location="good.txt")` -
+* `JavaJulietSuite.write_bad(self, location="bad.txt")` -
+
+* `JavaJuliet.__init__(self, path)` -
+* `JavaJuliet.__str__(self)` -
+* `JavaJuliet.chunks(self)` -
+* `JavaJuliet.good_bad_separator(self)` -
+* `JavaJuliet.java_file_cleaner(file_loc)` -
+* `JavaJuliet._comment_stripper(string)` -
+* `JavaJuliet._crush(string)` -
+* `JavaJuliet._allman_to_knr(string)` -
+
+* `Javalect.__init__(self)` -
+* `Javalect.embed(self, flat_method)` -
+* `Javalect.execute_routine(files, h5_loc, log_write=False)` -
+* `Javalect.prepare_corpus(language, method_names="preserve", mode="w")` -
+* `Javalect.scrape_corpus(test_suite_location, write_loc="<poliarty>.txt")` -
 
 ## model.py
+* `AchillesModel.RNN()` -
+* `AchillesModel.train()` -
 
 ## utility.py
+* `read_file(path)` -
+* `get_cmd_args()` -
+* `find_occurrences(s, ch)` -
+* `parse_cmd_args(goals)` -
+* `get_files(path, language="java")` -
+* `read_data(polarity, language="java")` -
+* `generate_data(language="java")` -
 
+* `Logger.__init__(self)` -
+* `Logger.log_prediction(self, s, p)` -
+* `Logger.log(self, s)` -
+* `Logger.escape_ansi(line)` -
+* `Logger.write(self)` -
