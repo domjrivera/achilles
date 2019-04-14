@@ -1,4 +1,4 @@
-## [WIP]Project Achilles - A Static Source Code Vulnerability Identifier Using LSTMs
+# [WIP]Project Achilles
 ![Achilles](assets/logo.jpg)
 
 ## Calling Achilles from the Terminal
