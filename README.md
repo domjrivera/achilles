@@ -70,6 +70,7 @@ important to keep this in mind.
 
 
 ## javalect.py
+Contains functions and objects used that are relevant only to Java files.
 * `flatten(chunk)` - returns a space delimited string tokenized by the Javalang tokenizer.
 * `tokenize(contents)` - tokenizer; because javalang.tokenizer.tokenize(contents) was too verbose.
 * `get_method_name(flat_string)` - extracts the name of the method from a flattened chunk. The method name is used for display the results to the user.
@@ -105,6 +106,7 @@ The model used is equivalent to the model from [this Kaggle Kernel](https://www.
 * `AchillesModel.train()` - trains the LSTM-RNN.
 
 ## utility.py
+Describes the Logger object, and various functions that are language-independent.
 * `read_file(path)` - returns the contents of a file.
 * `get_cmd_args()` - parses the command line args. If more than 100 files are recovered for Achilles to examine, it will ask the user if they wish to continue.
 * `find_occurrences(s, ch)` - helper function; used to find the occurrences of characters in a string.
