@@ -1,23 +1,17 @@
-from javalect import *
-from model import *
 import os
-import csv
 import argparse
-import re
-import datetime
 import fnmatch
+import datetime
+from javalect import *
+from constants import *
 
 
-def read_file(path):
-    with open(path, 'r') as content_file:
-        return content_file.read()
-
-
-def get_cmd_args():
+def parse_args():
     parser = argparse.ArgumentParser(description='Parse input string')
     parser.add_argument('goals', help='HELP!', nargs='+')
     args = parser.parse_args()
     goals = ' '.join(args.goals).replace(",", " ").split(" ")
+
     ls = parse_cmd_args(goals)
     if len(ls) == 1:
         print("No compatible files found.")
@@ -33,14 +27,8 @@ def get_cmd_args():
     return ls[1:], ls[0]
 
 
-# Courtesy of Marco L. on Stack Overflow
-def find_occurrences(s, ch):
-    return [i for i, letter in enumerate(s) if letter == ch]
-
-
 def parse_cmd_args(goals):
     try:
-        # Get version information.
         if goals[0].lower() == "version":
             print(version_info)
             quit()
@@ -54,19 +42,6 @@ def parse_cmd_args(goals):
             # If there isn't language support, default to Java.
             return ["java", os.getcwd() + goals[0]]
 
-        # Re-process & balance <language>_<polarity>.txt files
-        elif goals[0] == "balance":
-            try:
-                if goals[1] == "java":
-                    try:
-                        Javalect.prepare_corpus("java", goals[2])
-                    except:
-                        Javalect.prepare_corpus("java", "random")
-                quit()
-            except:
-                print("Invalid arguments.")
-                quit()
-
         # Evaluate a file or folder using a specified language.
         elif goals[0].lower() in languages:
             if len(goals) == 2:
@@ -79,24 +54,12 @@ def parse_cmd_args(goals):
             elif len(goals) == 1:
                 # Evaluate all files in the current directory.
                 return get_files(os.getcwd(), goals[0].lower())
-
-        # Train neural network.
-        elif goals[0].lower() == "train":
-            if goals[1].lower() not in languages.keys():
-                print("No language support for " + goals[1] + ".")
-                quit(0)
-            try:
-                print("Training model.")
-                AchillesModel.train(goals[1])
-                quit()
-            except:
-                print("Unable to locate training data: data/" + goals[0] + "_data.csv")
-                quit()
-        else:
-            print("Invalid arguments.")
-            quit()
     except:
         quit()
+
+
+def find_occurrences(s, ch):
+    return [i for i, letter in enumerate(s) if letter == ch]
 
 
 def get_files(path, language="java"):
@@ -109,29 +72,6 @@ def get_files(path, language="java"):
                 if item[extension_mark:] in languages[language]:
                     ls.append(root + "/" + item)
     return [language] + list(set(ls))
-
-
-def read_data(polarity, language="java"):
-    return read_file(os.path.dirname(__file__) + "/data/" + language + "_" + polarity + ".txt").split("\n\n\n\n\n")
-
-
-def generate_data(language="java"):
-    g = read_data("good", language=language)
-    b = read_data("bad", language=language)
-    ls = []
-    for good in g:
-        f = flatten(good)
-        if len(f) > 0:
-            ls.append([f, 0])
-    for bad in b:
-        f = flatten(bad)
-        if len(f) > 0:
-            ls.append([f, 1])
-
-    with open(os.path.dirname(__file__) + "/data/" + language + "_" + "data.csv", 'w') as f:
-        writer = csv.writer(f)
-        writer.writerows([["input", "label"]] + ls)
-    f.close()
 
 
 class Logger:
@@ -171,4 +111,3 @@ class Logger:
         with open(os.path.dirname(__file__) + "/logs/" + current, "w") as f:
             f.write(self.data)
         print("\nThe results of this run can be found in " + os.path.dirname(__file__) + "/achilles/logs/" + current)
-

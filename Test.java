@@ -11,8 +11,12 @@ class Test {
             x = x + good(2, 3);
         } else {
             bad();
+            /*
+            this is a multi line comment
+             */
         }
     }
+    // single line comment
 
     public void bad(HttpServletRequest request, HttpServletResponse response) throws Throwable {
         String data;
