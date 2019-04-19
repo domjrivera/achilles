@@ -1,4 +1,3 @@
-import fnmatch
 import datetime
 from javalect import *
 import argparse
@@ -39,19 +38,6 @@ class Args:
 
 def find_occurrences(s, ch):
     return [i for i, letter in enumerate(s) if letter == ch]
-
-
-def get_files(path, language="java"):
-    ls = []
-    for root, _, files in os.walk(path):
-        for item in fnmatch.filter(files, "*"):
-            extension_mark = find_occurrences(item, ".")
-            if len(extension_mark) > 0:
-                extension_mark = extension_mark[-1]
-                if item[extension_mark:] in languages[language]:
-                    ls.append(root + "/" + item)
-    return [language] + list(set(ls))
-
 
 class Logger:
     def __init__(self):
