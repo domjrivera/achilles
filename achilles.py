@@ -3,10 +3,7 @@ import os
 
 
 def main(testing):
-    if testing:
-        files, lang = [os.path.dirname(__file__) + "/" + "Test.java"], "java"
-    else:
-        files, lang = get_cmd_args()
+    files, lang = [os.path.dirname(__file__) + "/" + "Test.java"], "java"
 
     h5_loc = os.path.dirname(__file__) + "/" + SAVE_MODEL_AS.replace("<language>", lang)
     if not os.path.isfile(h5_loc):
@@ -20,7 +17,7 @@ def main(testing):
 
     # Add language support here
     if lang == "java":
-        Javalect.execute_routine(files, h5_loc)
+        pass
     else:
         quit()
 

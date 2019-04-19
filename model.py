@@ -27,9 +27,10 @@ class AchillesModel:
         return model
 
     @staticmethod
-    def train(language):
-        df = pd.read_csv(os.path.dirname(__file__) + '/data/' + language + '_balanced_data.csv')
-        X = df. input
+    def train(df, write_h5_to):
+        if isinstance(df, str):
+            df = pd.read_csv(df)
+        X = df.input
         Y = df.label
         le = LabelEncoder()
         Y = le.fit_transform(Y)
@@ -49,5 +50,5 @@ class AchillesModel:
         test_sequences = tok.texts_to_sequences(X_test)
         test_sequences_matrix = sequence.pad_sequences(test_sequences, maxlen=MAX_LEN)
         accr = model.evaluate(test_sequences_matrix, Y_test)
-        model.save(os.path.dirname(__file__) + "/" + SAVE_MODEL_AS.replace("<language>", language), overwrite=MODEL_OVERWRITE)
+        model.save(write_h5_to, overwrite=True)
         print('Test set\n  Loss: {:0.3f}\n  Accuracy: {:0.3f}\n'.format(accr[0], accr[1]))

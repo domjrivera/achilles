@@ -5,7 +5,8 @@ class Test {
     final int PI = 2;
     private int val;
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         int x = 23;
         if (x == 2) {
             x = x + good(2, 3);

@@ -1,7 +1,6 @@
-from keras.models import load_model
-from keras.preprocessing.text import Tokenizer
 import javalang
 import re
+import os
 
 
 class JavaClass:
@@ -31,28 +30,16 @@ class JavaClass:
 
     @staticmethod
     def chunker(contents):
-        r_brace = JavaClass.find_occurrences(contents, "}")
-        l_brace = JavaClass.find_occurrences(contents, "{")
-        tokens = javalang.tokenizer.tokenize(contents)
-        guide, chunks = "", []
-        _blocks = ["enum", "finally", "catch", "do", "else", "for",
-                   "if", "try", "while", "switch", "synchronized"]
-
-        for token in tokens:
-            if token.value in ["{", "}"]:
-                guide += token.value
-
-        while len(guide) > 0:
-            i = guide.find("}")
-            l, r = l_brace[i - 1], r_brace[0]
-            l_brace.remove(l)
-            r_brace.remove(r)
-
-            ln = contents[0:l].rfind("\n")
-            chunk = contents[ln:r + 1]
-            if chunk.split()[0] in ["public", "private", "protected"]:
-                chunks.append(JavaMethod(chunk))
-            guide = guide.replace("{}", "", 1)
+        s, temp = contents, len(contents)
+        regex = r"(public|protected|private|static|\s) +[\w\<\>\[\]]+\s+(\w+) *\([^\)]*\) *(\{?|[^;])"
+        ls, chunks = [], []
+        while re.search(regex, contents):
+            match = re.search(regex, contents)
+            contents = (" "*match.end()) + contents[match.end():]
+            ls.append(match.start())
+        ls.append(temp)
+        for x in range(len(ls) - 1):
+            chunks.append(s[ls[x]:ls[x+1]])
         return chunks
 
 
@@ -74,8 +61,46 @@ class JavaMethod:
         tokens = javalang.tokenizer.tokenize(self.method)
         return iter([tok.value for tok in tokens])
 
-#
-# class Javalect:
+
+class CWE4J:
+    def __init__(self, root):
+        self.data = {}
+        self.root = root
+        for directory in os.listdir(root):
+            self.add(directory)
+
+    def add(self, filepath):
+        vuln_name = filepath.split("__")[0]
+        if vuln_name in self.data.keys():
+            self.data[vuln_name].append(self.root + "/" + filepath)
+        else:
+            self.data[vuln_name] = [self.root + "/" + filepath]
+
+    def __iter__(self):
+        return iter(self.data.keys())
+
+    def __getitem__(self, item):
+        return self.data[item]
+
+    def __len__(self):
+        return len(self.data.keys())
+
+
+class Javalect:
+    @staticmethod
+    def train_models(path, threshold=0):
+        cwe4j = CWE4J(path)
+        for cwe in cwe4j:
+            if len(cwe4j[cwe]) >= threshold:
+                Javalect._format_corpus(cwe4j[cwe])
+
+    @staticmethod
+    def _format_corpus(cwe_list):
+        ls = []
+        for cwe_path in cwe_list:
+            j = JavaClass(cwe_path)
+
+
 #     def __init__(self):
 #         self.tok = Tokenizer(num_words=MAX_WORDS)
 #         df = pd.read_csv(os.path.dirname(__file__) + '/data/java_balanced_data.csv')
@@ -108,3 +133,7 @@ class JavaMethod:
 #         if log_write:
 #             f.write()
 #
+
+
+Javalect.train_models("/Users/Strickolas/Downloads/CWE", threshold=7015)
+

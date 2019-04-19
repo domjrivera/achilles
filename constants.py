@@ -10,10 +10,6 @@ DROPOUT_RATE = 0.5
 LOSS_FUNCT = 'binary_crossentropy'
 ACTIVATION_FUNCT = 'relu'
 
-# ================[Season to Taste]=================
-SAVE_MODEL_AS = "checkpoints/<language>_master.h5"
-MODEL_OVERWRITE = True
-
 # =================[Achilles Info]==================
 __version__ = "Beta 0.1.0"
 version_info = "\x1b[33mProject Achilles ....................... " \
