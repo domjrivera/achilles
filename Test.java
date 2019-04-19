@@ -5,8 +5,7 @@ class Test {
     final int PI = 2;
     private int val;
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         int x = 23;
         if (x == 2) {
             x = x + good(2, 3);
@@ -19,7 +18,8 @@ class Test {
     }
     // single line comment
 
-    public void bad(HttpServletRequest request, HttpServletResponse response) throws Throwable {
+    public void bad(HttpServletRequest request, HttpServletResponse response) throws Throwable
+    {
         String data;
         data = "";
         {

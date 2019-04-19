@@ -7,7 +7,7 @@ class JavaClass:
     def __init__(self, path):
         self.src = JavaClass._extract_code(path)
         self.methods = JavaClass.chunker(self.src)
-        self.method_names = [method.method_name for method in self.methods]
+        self.method_names = [method.name for method in self.methods]
 
     def __iter__(self):
         return iter(self.methods)
@@ -30,24 +30,35 @@ class JavaClass:
 
     @staticmethod
     def chunker(contents):
-        s, temp = contents, len(contents)
-        regex = r"(public|protected|private|static|\s) +[\w\<\>\[\]]+\s+(\w+) *\([^\)]*\) *(\{?|[^;])"
-        ls, chunks = [], []
-        while re.search(regex, contents):
-            match = re.search(regex, contents)
-            contents = (" "*match.end()) + contents[match.end():]
-            ls.append(match.start())
-        ls.append(temp)
-        for x in range(len(ls) - 1):
-            chunks.append(s[ls[x]:ls[x+1]])
-        chunks[-1] = "}".join(chunks[-1].split("}")[:-1])
+        r_brace = JavaClass.find_occurrences(contents, "}")
+        l_brace = JavaClass.find_occurrences(contents, "{")
+        tokens = javalang.tokenizer.tokenize(contents)
+        guide, chunks = "", []
+        _blocks = ["enum", "finally", "catch", "do", "else", "for",
+                   "if", "try", "while", "switch", "synchronized"]
+
+        for token in tokens:
+            if token.value in ["{", "}"]:
+                guide += token.value
+
+        while len(guide) > 0:
+            i = guide.find("}")
+            l, r = l_brace[i - 1], r_brace[0]
+            l_brace.remove(l)
+            r_brace.remove(r)
+
+            ln = contents[0:l].rfind("\n")
+            chunk = contents[ln:r + 1]
+            if chunk.split()[0] in ["public", "private", "protected"]:
+                chunks.append(JavaMethod(chunk))
+            guide = guide.replace("{}", "", 1)
         return chunks
 
 
 class JavaMethod:
     def __init__(self, chunk, polarity="?", risk=-1):
         self.method = chunk
-        self.method_name = self.method[:self.method.find("(")].split()[-1]
+        self.name = chunk[:chunk.find("(")].split()[-1]
         self.polarity = polarity
         self.risk = risk
 
@@ -92,15 +103,13 @@ class Javalect:
     def train_models(path, threshold=0):
         cwe4j = CWE4J(path)
         for cwe in cwe4j:
-            if len(cwe4j[cwe]) >= threshold:
+            if len(cwe4j[cwe]) < threshold:
                 Javalect._format_corpus(cwe4j[cwe])
 
     @staticmethod
     def _format_corpus(cwe_list):
-        ls = []
         for cwe_path in cwe_list:
             j = JavaClass(cwe_path)
-
 
 #     def __init__(self):
 #         self.tok = Tokenizer(num_words=MAX_WORDS)
@@ -136,5 +145,8 @@ class Javalect:
 #
 
 
-Javalect.train_models("/Users/Strickolas/Downloads/CWE", threshold=7015)
-
+# Javalect.train_models("/Users/Strickolas/Downloads/CWE", threshold=3)
+j = JavaClass("/Volumes/CoreBlue/Programming/Projects/achilles/Test.java")
+for method in j.methods:
+    print(method)
+    print("="*30)
