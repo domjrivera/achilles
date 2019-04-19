@@ -1,61 +1,40 @@
-import os
-import argparse
 import fnmatch
 import datetime
 from javalect import *
+import argparse
+import os
 from constants import *
 
 
-def parse_args():
-    parser = argparse.ArgumentParser(description='Parse input string')
-    parser.add_argument('goals', help='HELP!', nargs='+')
-    args = parser.parse_args()
-    goals = ' '.join(args.goals).replace(",", " ").split(" ")
+class Args:
+    @staticmethod
+    def get():
+        parser = argparse.ArgumentParser(description='Parse input string')
+        parser.add_argument('goals', help='HELP!', nargs='+')
+        args = parser.parse_args()
+        goals = ' '.join(args.goals).replace(",", " ").split(" ")
+        Args.parse(goals)
 
-    ls = parse_cmd_args(goals)
-    if len(ls) == 1:
-        print("No compatible files found.")
-        quit(0)
-    if len(ls) > 100:
-        while True:
-            ans = input("Found " + str((len(ls) - 1)) + " " + ls[0] + " files. Do you want to continue? [y]es, [n]o: ")
-            if "y" == ans.lower():
-                break
-            elif "n" == ans.lower():
-                quit()
-    print(version_info)
-    return ls[1:], ls[0]
-
-
-def parse_cmd_args(goals):
-    try:
-        if goals[0].lower() == "version":
+    @staticmethod
+    def parse(goals):
+        if goals[0] in ["version", "-v", "--version"]:
             print(version_info)
-            quit()
+            quit(0)
 
-        # Evaluate a single file.
-        elif os.path.isfile(goals[0]):
-            for language in languages.keys():
-                for extension in languages[language]:
-                    if extension == goals[0][-len(extension):]:
-                        return [language, os.getcwd() + goals[0]]
-            # If there isn't language support, default to Java.
-            return ["java", os.getcwd() + goals[0]]
+        # Argument actions for Java.
+        elif goals[0] == "java":
+            if goals[1] == "train":
+                print(goals)
+            elif goals[1] in ["list", "-ls", "ls"]:
+                ls = os.listdir(str(os.path.realpath(__file__).rsplit("/", 1)[0]) + "/data/java/checkpoints/")
+                print("\x1b[36mFound " + str(len(ls)) + " Java checkpoints:\x1b[m")
+                for cwe in ls:
+                    print("  \x1b[36m*\x1b[m", cwe[:-3])
 
-        # Evaluate a file or folder using a specified language.
-        elif goals[0].lower() in languages:
-            if len(goals) == 2:
-                # Evaluate all files of a certain language in folder.
-                if os.path.isdir(goals[1]):
-                    return get_files(goals[1], goals[0])
-                # Evaluate a single file.
-                elif os.path.isfile(goals[1]):
-                    return [goals[0].lower, goals[1]]
-            elif len(goals) == 1:
-                # Evaluate all files in the current directory.
-                return get_files(os.getcwd(), goals[0].lower())
-    except:
-        quit()
+
+        else:
+            print("Invalid parameters.")
+            quit(0)
 
 
 def find_occurrences(s, ch):

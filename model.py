@@ -7,7 +7,6 @@ from keras.preprocessing import sequence
 from keras.preprocessing.text import Tokenizer
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
-import os
 
 from constants import *
 

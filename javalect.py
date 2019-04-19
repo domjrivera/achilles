@@ -1,11 +1,15 @@
 import javalang
 import re
 import os
+import random
+import string
+from model import *
 
 
 class JavaClass:
     def __init__(self, path):
         self.src = JavaClass._extract_code(path)
+        self.src = JavaClass._allman_to_knr(self.src)
         self.methods = JavaClass.chunker(self.src)
         self.method_names = [method.name for method in self.methods]
 
@@ -29,6 +33,18 @@ class JavaClass:
         return [i for i, letter in enumerate(s) if letter == ch]
 
     @staticmethod
+    def _allman_to_knr(string):
+        s, string = [], string.split("\n")
+        line = 0
+        while line < len(string):
+            if string[line].strip() == "{":
+                s[-1] = s[-1].rstrip() + " {"
+            else:
+                s.append(string[line])
+            line += 1
+        return "\n".join(s)
+
+    @staticmethod
     def chunker(contents):
         r_brace = JavaClass.find_occurrences(contents, "}")
         l_brace = JavaClass.find_occurrences(contents, "{")
@@ -49,7 +65,7 @@ class JavaClass:
 
             ln = contents[0:l].rfind("\n")
             chunk = contents[ln:r + 1]
-            if chunk.split()[0] in ["public", "private", "protected"]:
+            if chunk.split()[0] in ["public", "private", "protected"] and "class" not in chunk.split()[1]:
                 chunks.append(JavaMethod(chunk))
             guide = guide.replace("{}", "", 1)
         return chunks
@@ -100,53 +116,33 @@ class CWE4J:
 
 class Javalect:
     @staticmethod
-    def train_models(path, threshold=0):
-        cwe4j = CWE4J(path)
+    def train_models(root, threshold=0):
+        cwe4j = CWE4J(root)
         for cwe in cwe4j:
-            if len(cwe4j[cwe]) < threshold:
-                Javalect._format_corpus(cwe4j[cwe])
+            if len(cwe4j[cwe]) >= threshold:
+                Javalect._train_model(str(cwe), cwe4j[cwe])
 
     @staticmethod
-    def _format_corpus(cwe_list):
-        for cwe_path in cwe_list:
-            j = JavaClass(cwe_path)
+    def _train_model(cwe_name, cwe_paths):
+        df = [["input", "label"]]
+        for path in cwe_paths:
+            try:
+                j = JavaClass(path)
+                for method in j.methods:
+                    focus = method.tokens().split("(", 1)
+                    if "good" in focus[0]:
+                        rand = ''.join(random.choices(string.ascii_uppercase + string.digits, k=7))
+                        temp = focus[0].replace("good", rand) + "(" + focus[1]
+                        df.append([temp, "0"])
+                    elif "bad" in focus[0]:
+                        rand = ''.join(random.choices(string.ascii_uppercase + string.digits, k=7))
+                        temp = focus[0].replace("bad", rand) + "(" + focus[1]
+                        df.append([temp, "1"])
+            except:
+                pass
 
-#     def __init__(self):
-#         self.tok = Tokenizer(num_words=MAX_WORDS)
-#         df = pd.read_csv(os.path.dirname(__file__) + '/data/java_balanced_data.csv')
-#         self.tok.fit_on_texts(df.input)
-#
-#     def embed(self, flat_method):
-#         sequences = self.tok.texts_to_sequences([flat_method])
-#         sequences_matrix = sequence.pad_sequences(sequences, maxlen=MAX_LEN)
-#         return sequences_matrix
-#
-#     @staticmethod
-#     def execute_routine(files, h5_loc, log_write=False):
-#         f, javal = Logger(), Javalect()
-#         model = load_model(h5_loc)
-#         for file in files:
-#             try:
-#                 f.log("Analyzing " + file + ":")
-#                 contents = JavaJuliet.java_file_cleaner(file)
-#                 for chunk in chunker(contents):
-#                     method = flatten(chunk)
-#
-#                     # Filter non-methods from chunks
-#                     if method.split(" ")[0] in ["public", "private"]:
-#                         focus = " " + get_method_name(method) + "()"
-#                         x = javal.embed(method)
-#                         pred = model.predict(x)[0][0]
-#                         f.log_prediction(focus, pred)
-#             except:
-#                 pass
-#         if log_write:
-#             f.write()
-#
+        df = pd.DataFrame(df[1:], columns=df[0])
+        AchillesModel.train(df, os.path.dirname(__file__) + "/data/java/checkpoints/" + cwe_name + ".h5")
 
 
-# Javalect.train_models("/Users/Strickolas/Downloads/CWE", threshold=3)
-j = JavaClass("/Volumes/CoreBlue/Programming/Projects/achilles/Test.java")
-for method in j.methods:
-    print(method)
-    print("="*30)
+# Javalect.train_models("/Users/Strickolas/Downloads/CWE", threshold=100)
