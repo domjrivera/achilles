@@ -40,6 +40,7 @@ class JavaClass:
         ls.append(temp)
         for x in range(len(ls) - 1):
             chunks.append(s[ls[x]:ls[x+1]])
+        chunks[-1] = "}".join(chunks[-1].split("}")[:-1])
         return chunks
 
 
