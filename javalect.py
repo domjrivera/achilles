@@ -2,6 +2,9 @@ import javalang
 import re
 import random
 import string
+import numpy as np
+from sklearn.utils.extmath import softmax
+from datetime import datetime
 from model import *
 
 
@@ -71,11 +74,9 @@ class JavaClass:
 
 
 class JavaMethod:
-    def __init__(self, chunk, polarity="?", risk=-1):
+    def __init__(self, chunk):
         self.method = chunk
         self.name = chunk[:chunk.find("(")].split()[-1]
-        self.polarity = polarity
-        self.risk = risk
 
     def tokens(self):
         tokens = javalang.tokenizer.tokenize(self.method)
@@ -115,15 +116,13 @@ class CWE4J:
 
 class Javalect:
     @staticmethod
-    def analyze(path):
-        pass
-
-    @staticmethod
     def train_models(root, threshold=0):
-        cwe4j = CWE4J(root)
+        cwe4j, df_all = CWE4J(root), [["input", "label"]]
         for cwe in cwe4j:
             if len(cwe4j[cwe]) >= threshold:
                 Javalect._train_model(str(cwe), cwe4j[cwe])
+                # df_all.extend(Javalect._train_model(str(cwe), cwe4j[cwe]))
+
 
     @staticmethod
     def _train_model(cwe_name, cwe_paths):
@@ -143,9 +142,47 @@ class Javalect:
                         df.append([temp, "1"])
             except:
                 pass
+        dataframe = pd.DataFrame(df[1:], columns=df[0])
+        AchillesModel.train(dataframe, os.path.dirname(__file__) + "/data/java/checkpoints/" + cwe_name + ".h5")
+        # return df[1:]
 
-        df = pd.DataFrame(df[1:], columns=df[0])
-        AchillesModel.train(df, os.path.dirname(__file__) + "/data/java/checkpoints/" + cwe_name + ".h5")
+    @staticmethod
+    def _embed(tok, method):
+        sequences = tok.texts_to_sequences([method])
+        sequences_matrix = sequence.pad_sequences(sequences, maxlen=MAX_LEN)
+        return sequences_matrix
+
+    @staticmethod
+    def analyze(path):
+        from keras.models import load_model
+        start = datetime.now()
+        tok = Tokenizer(num_words=MAX_WORDS)
+        vocab = pd.read_csv(os.path.dirname(__file__) + '/data/java/vocab.csv')
+        tok.fit_on_texts(vocab.input)
+        root = os.path.dirname(__file__) + "/data/java/checkpoints/"
+
+        h5_ls, vuln_models = os.listdir(root), {}
+
+        for h5 in h5_ls:
+            progress = str(h5_ls.index(h5)+1) + "/" + str(len(h5_ls))
+            print("\x1b[33m(" + progress + ") - Loading " + h5[:-3] + "...\x1b[m")
+            vuln_models[h5[:-3]] = load_model(root + h5)
+
+        jfile = JavaClass(path)
+        for method in jfile.methods:
+            print("\n\x1b[33mEvaluating " + method.name + "()...\x1b[m")
+            metrics, i = [], 0
+            for vuln_model in vuln_models:
+                pred = float(vuln_models[vuln_model].predict(Javalect._embed(tok, str(method.tokens())))[0][0])
+                metrics.append(pred)
+            soft_metrics = list(softmax(np.asarray([metrics]))[0])
+            print("  p-risk     p-dist     vulnerability")
+            for vuln_model in vuln_models:
+                print("  " + str(metrics[i])[0:6] + "     " + str(soft_metrics[i])[0:6] + "     " + vuln_model)
+                i += 1
+
+        print("Analyzed " + str(len(jfile.methods)) + " methods against " + str(len(h5_ls)) + " vulnerabilities in " +
+              str(datetime.now() - start) + "s.")
 
 
-# Javalect.train_models("/Users/Strickolas/Downloads/CWE", threshold=100)
+Javalect.analyze("/Volumes/CoreBlue/Programming/Projects/achilles/Test.java")
