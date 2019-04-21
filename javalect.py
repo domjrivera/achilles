@@ -1,6 +1,5 @@
 import javalang
 import re
-import os
 import random
 import string
 from model import *
@@ -115,6 +114,10 @@ class CWE4J:
 
 
 class Javalect:
+    @staticmethod
+    def analyze(path):
+        pass
+
     @staticmethod
     def train_models(root, threshold=0):
         cwe4j = CWE4J(root)

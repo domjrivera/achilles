@@ -1,4 +1,9 @@
 import pandas as pd
+import sys
+import os
+# Disables printing "Using XXX backend", because it pisses me off.
+stderr = sys.stderr
+sys.stderr = open(os.devnull, 'w')
 from keras.callbacks import EarlyStopping
 from keras.layers import LSTM, Activation, Dense, Dropout, Input, Embedding
 from keras.models import Model
@@ -7,7 +12,6 @@ from keras.preprocessing import sequence
 from keras.preprocessing.text import Tokenizer
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
-
 from constants import *
 
 

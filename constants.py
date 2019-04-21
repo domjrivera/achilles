@@ -11,8 +11,10 @@ LOSS_FUNCT = 'binary_crossentropy'
 ACTIVATION_FUNCT = 'relu'
 
 # =================[Achilles Info]==================
-__version__ = "Beta 0.2.0"
-version_info = "\x1b[33mProject Achilles ....................... " \
-               + __version__ + "\n" \
-                               " The Towson University Software Engineering Department\n" \
-                               " Nicholas Saccente | View more at github.com/strickolas\x1b[m"
+__version__ = "β 1.2"
+version_info = "\x1b[33mAchilles " + __version__ + " - Nick Saccente - github.com/strickolas\n"\
+               " The Towson University Software Engineering Department\x1b[m\n"
+
+
+languages = {".java": "java",
+             ".j": "java"}
