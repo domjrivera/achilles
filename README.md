@@ -14,6 +14,3 @@ In your terminal, enter `nano ~/.bash_profile`, then add the line `alias achille
  As input, AchillesRNN takes a sequence of tokens by method; with the method name replaced by a random string of characters.
 1. Replace instances of `# Add language support here.` in achilles.py with an elif block, calling the appropriate static
 functions for training and predicting.
-
-## Vocabulary
-*
