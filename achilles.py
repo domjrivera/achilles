@@ -4,6 +4,8 @@ from constants import *
 
 
 def main():
+    print(version_info)
+
     # Top-level parser.
     parser = argparse.ArgumentParser(prog='achilles')
     subparsers = parser.add_subparsers(help='sub-command help')
@@ -28,21 +30,25 @@ def main():
         from javalect import Javalect
         directory, language, threshold = args.replace("directory=", "").replace("language=", "")\
                                              .replace("threshold=", "").replace("\'", "").split(", ")
-        if os.path.isdir(directory) or True:
-            print("\x1b[33mTraining " + language + " vulnerability models using files from \"" +
-                  directory + "\" with a threshold of " + threshold + ".\x1b[m")
-            Javalect.train_models(directory, threshold=0)
+        if os.path.isdir(directory):
+            if language == "java":
+                print("\x1b[33mTraining " + language + " vulnerability models using files from \"" +
+                      directory + "\" with a threshold of " + threshold + ".\x1b[m")
+                Javalect.train_models(directory, threshold=0)
+
+            # Add language support here.
         else:
             print("\x1b[31mUnable to locate folder: " + directory + "\x1b[m")
 
     elif "file=" in args:  # analyze
         from javalect import Javalect
         args = args.replace("file=", "").replace("\'", "")
-        if os.path.isfile(args) or True:
+        if os.path.isfile(args):
             extension = "." + args.split(".")[-1]
             if extension in languages:
                 if languages[extension] == "java":
                     Javalect.analyze(args)
+
                 # Add language support here.
             else:
                 print("\x1b[31mNo language support for \"" + extension + "\".\x1b[m")
@@ -54,7 +60,7 @@ def main():
         fpath = str(os.path.realpath(__file__).rsplit("/", 1)[0]) + "/data/" + args + "/checkpoints/"
         if os.path.isdir(fpath):
             ls = os.listdir(fpath)
-            print("\x1b[36mFound " + str(len(ls)) + " Java checkpoints:\x1b[m")
+            print("\x1b[36mFound " + str(len(ls)) + args + " checkpoints:\x1b[m")
             for cwe in ls:
                 print("  \x1b[36m*\x1b[m", cwe[:-3])
         else:

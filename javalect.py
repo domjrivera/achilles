@@ -3,6 +3,7 @@ import re
 import random
 import string
 import numpy as np
+import csv
 from sklearn.utils.extmath import softmax
 from datetime import datetime
 from model import *
@@ -117,12 +118,10 @@ class CWE4J:
 class Javalect:
     @staticmethod
     def train_models(root, threshold=0):
-        cwe4j, df_all = CWE4J(root), [["input", "label"]]
+        cwe4j = CWE4J(root)
         for cwe in cwe4j:
             if len(cwe4j[cwe]) >= threshold:
                 Javalect._train_model(str(cwe), cwe4j[cwe])
-                # df_all.extend(Javalect._train_model(str(cwe), cwe4j[cwe]))
-
 
     @staticmethod
     def _train_model(cwe_name, cwe_paths):
@@ -144,7 +143,9 @@ class Javalect:
                 pass
         dataframe = pd.DataFrame(df[1:], columns=df[0])
         AchillesModel.train(dataframe, os.path.realpath(__file__) + "/data/java/checkpoints/" + cwe_name + ".h5")
-        # return df[1:]
+        with open(os.path.realpath(__file__) + '/data/java/vocab.csv', 'a') as fd:
+            writer = csv.writer(fd)
+            writer.writerows(df[1:])
 
     @staticmethod
     def _embed(tok, method):
