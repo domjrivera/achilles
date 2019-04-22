@@ -17,13 +17,15 @@ Achilles to train on. These training files must be named in such a way that the 
 separated by "__", e.g. "CWE369_Divide_by_Zero__float_Environment_divide_52b.java". This example would be lumped together
 with all other example files that begin with "CWE369_Divide_by_Zero", and then an individual model of the same name will
 be generated using this data. This means that training new models is as simple as passing Achilles a directory with
-properly named example files to train on. Now, to elaborate on what exactly the threshold is; a threshold is simply a value
+properly named example files to train on.
+
+Now, to elaborate on what exactly the threshold is; a threshold is simply a value
 which tells Achilles how to handle the data. Any vulnerability category that has fewer example files than a given threshold
 will be dropped. In general, this prevents overfitting and improves the calculation of various metrics. Methods in the
 example files must contain either "good" or "bad" in the method name (corresponding to secure or vulnerable, respectively).
 This convention allows Achilles to properly label example methods. Remember, since Achilles redacts the method names upon
 training, the actual name of the method isn't too important. The most important thing is to make sure a method contains
-either "good" or "bad", otherwise, it will be ignored. 
+either "good" or "bad", otherwise, it will be ignored.
 
 ## Building Achilles Support for Other Languages
 1. In constants.py, add file extensions to the `languages` dictionary, with the target language as the value.
@@ -31,3 +33,4 @@ either "good" or "bad", otherwise, it will be ignored.
  As input, AchillesRNN takes a sequence of tokens by method; with the method name replaced by a random string of characters.
 1. Replace instances of `# Add language support here.` in achilles.py with an elif block, calling the appropriate static
 functions for training and predicting.
+
