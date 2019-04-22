@@ -31,7 +31,7 @@ def main():
         if os.path.isdir(directory) or True:
             print("\x1b[33mTraining " + language + " vulnerability models using files from \"" +
                   directory + "\" with a threshold of " + threshold + ".\x1b[m")
-            # Javalect.train_models(directory, threshold=0)
+            Javalect.train_models(directory, threshold=0)
         else:
             print("\x1b[31mUnable to locate folder: " + directory + "\x1b[m")
 

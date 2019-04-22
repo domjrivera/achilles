@@ -2,8 +2,8 @@ import pandas as pd
 import sys
 import os
 # Disables printing "Using XXX backend", because it pisses me off.
-# stderr = sys.stderr
-# sys.stderr = open(os.devnull, 'w')
+stderr = sys.stderr
+sys.stderr = open(os.devnull, 'w')
 from keras.callbacks import EarlyStopping
 from keras.layers import LSTM, Activation, Dense, Dropout, Input, Embedding
 from keras.models import Model

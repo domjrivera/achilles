@@ -143,7 +143,7 @@ class Javalect:
             except:
                 pass
         dataframe = pd.DataFrame(df[1:], columns=df[0])
-        AchillesModel.train(dataframe, os.path.dirname(__file__) + "/data/java/checkpoints/" + cwe_name + ".h5")
+        AchillesModel.train(dataframe, os.path.realpath(__file__) + "/data/java/checkpoints/" + cwe_name + ".h5")
         # return df[1:]
 
     @staticmethod
@@ -157,9 +157,9 @@ class Javalect:
         from keras.models import load_model
         start = datetime.now()
         tok = Tokenizer(num_words=MAX_WORDS)
-        vocab = pd.read_csv(os.path.dirname(__file__) + '/data/java/vocab.csv')
+        vocab = pd.read_csv(os.path.realpath(__file__) + '/data/java/vocab.csv')
         tok.fit_on_texts(vocab.input)
-        root = os.path.dirname(__file__) + "/data/java/checkpoints/"
+        root = os.path.realpath(__file__) + "/data/java/checkpoints/"
 
         h5_ls, vuln_models = os.listdir(root), {}
 
@@ -178,11 +178,17 @@ class Javalect:
             soft_metrics = list(softmax(np.asarray([metrics]))[0])
             print("  p-risk     p-dist     vulnerability")
             for vuln_model in vuln_models:
-                print("  " + str(metrics[i])[0:6] + "     " + str(soft_metrics[i])[0:6] + "     " + vuln_model)
+                print("  " + _fmt(metrics, i) + "     " + _fmt(soft_metrics, i) + "     " + vuln_model)
                 i += 1
 
-        print("Analyzed " + str(len(jfile.methods)) + " methods against " + str(len(h5_ls)) + " vulnerabilities in " +
-              str(datetime.now() - start) + "s.")
+        print("\n\x1b[33mAnalyzed " + str(len(jfile.methods)) + " methods against " + str(len(h5_ls)) +
+              " vulnerabilities in " + str(datetime.now() - start) + "\x1b[m.")
 
 
-Javalect.analyze("/Volumes/CoreBlue/Programming/Projects/achilles/Test.java")
+def _fmt(ls, x):
+    if float(ls[x]) < 0.0001:
+        return "x-> -∞"
+    if ls[x] == max(ls):
+        return "\x1b[33m" + str(ls[x])[0:6] + "\x1b[m"
+    else:
+        return str(ls[x])[0:6]
