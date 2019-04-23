@@ -142,8 +142,8 @@ class Javalect:
             except:
                 pass
         dataframe = pd.DataFrame(df[1:], columns=df[0])
-        AchillesModel.train(dataframe, os.path.realpath(__file__) + "/data/java/checkpoints/" + cwe_name + ".h5")
-        with open(os.path.realpath(__file__) + '/data/java/vocab.csv', 'a') as fd:
+        AchillesModel.train(dataframe, os.path.realpath(__file__)[:-11] + "/data/java/checkpoints/" + cwe_name + ".h5")
+        with open(os.path.realpath(__file__)[:-11] + '/data/java/vocab.csv', 'a') as fd:
             writer = csv.writer(fd)
             writer.writerows(df[1:])
 
@@ -158,9 +158,9 @@ class Javalect:
         from keras.models import load_model
         start = datetime.now()
         tok = Tokenizer(num_words=MAX_WORDS)
-        vocab = pd.read_csv(os.path.realpath(__file__) + '/data/java/vocab.csv')
+        vocab = pd.read_csv(os.path.realpath(__file__)[:-11] + '/data/java/vocab.csv')
         tok.fit_on_texts(vocab.input)
-        root = os.path.realpath(__file__) + "/data/java/checkpoints/"
+        root = os.path.realpath(__file__)[:-11] + "/data/java/checkpoints/"
 
         h5_ls, vuln_models = os.listdir(root), {}
 

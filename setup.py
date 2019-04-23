@@ -12,7 +12,5 @@ setup(
     author='Nicholas Saccente',
     author_email='nicholas.j.saccente@gmail.com',
     url="https://github.com/strickolas/achilles",
-    packages=['achilles'],
-    install_requires=['pandas', 'numpy', 'keras', 'tensorflow', 'numpy', 'sklearn',
-                      'javalang'],
+    install_requires=['pandas', 'numpy', 'keras', 'tensorflow', 'numpy', 'sklearn', 'javalang']
 )
