@@ -68,8 +68,9 @@ class JavaClass:
 
             ln = contents[0:l].rfind("\n")
             chunk = contents[ln:r + 1]
-            if chunk.split()[0] in ["public", "private", "protected"] and "class" not in chunk.split()[1]:
-                chunks.append(JavaMethod(chunk))
+            if len(chunk.split()) > 1:
+                if chunk.split()[0] in ["public", "private", "protected"] and "class" not in chunk.split()[1]:
+                    chunks.append(JavaMethod(chunk))
             guide = guide.replace("{}", "", 1)
         return chunks
 
