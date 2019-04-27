@@ -9,9 +9,6 @@ from datetime import datetime
 from model import *
 
 
-# split model training data, retrain, and evaluate.
-
-
 # JavaClass: receives a `path` of a Java file, extracts the code,
 # converts the code from Allman to K&R, extracts the methods,
 # and creates a list of JavaMethod objects.
@@ -22,6 +19,7 @@ class JavaClass:
         self.methods = JavaClass.chunker(self.src)
         self.method_names = [method.name for method in self.methods]
 
+    # __iter__: iterate through the methods in the JavaClass.
     def __iter__(self):
         return iter(self.methods)
 
