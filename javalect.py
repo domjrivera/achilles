@@ -9,6 +9,12 @@ from datetime import datetime
 from model import *
 
 
+# split model training data, retrain, and evaluate.
+
+
+# JavaClass: receives a `path` of a Java file, extracts the code,
+# converts the code from Allman to K&R, extracts the methods,
+# and creates a list of JavaMethod objects.
 class JavaClass:
     def __init__(self, path):
         self.src = JavaClass._extract_code(path)
@@ -19,6 +25,8 @@ class JavaClass:
     def __iter__(self):
         return iter(self.methods)
 
+    # _extract_code: receives a `path` to a Java file, removes all comments,
+    # and returns the contents of the file sans comments.
     @staticmethod
     def _extract_code(path):
         with open(path, 'r') as content_file:
@@ -27,26 +35,34 @@ class JavaClass:
             contents = re.sub(re.compile("//.*?\n"),  "", contents)
             return contents
 
+    # tokens: A getter that returns a 1-dimensional space-delimited
+    # string of tokens for the whole source file.
     def tokens(self):
         tokens = javalang.tokenizer.tokenize(self.src)
         return [" ".join(token.value for token in tokens)][0]
 
+    # find_occurences: Returns a list of all occurrences of
+    # a character `ch` in a string `s`.
     @staticmethod
     def find_occurrences(s, ch):
         return [i for i, letter in enumerate(s) if letter == ch]
 
+    # _allman_to_knr: Converts a string `contents` from the style of
+    # allman to K&R. This is required for `chunker` to work correctly.
     @staticmethod
-    def _allman_to_knr(string):
-        s, string = [], string.split("\n")
+    def _allman_to_knr(contents):
+        s, contents = [], contents.split("\n")
         line = 0
-        while line < len(string):
-            if string[line].strip() == "{":
+        while line < len(contents):
+            if contents[line].strip() == "{":
                 s[-1] = s[-1].rstrip() + " {"
             else:
-                s.append(string[line])
+                s.append(contents[line])
             line += 1
         return "\n".join(s)
 
+    # chunker: Extracts the methods from `contents` and returns
+    # a list of `JavaMethod` objects.
     @staticmethod
     def chunker(contents):
         r_brace = JavaClass.find_occurrences(contents, "}")
@@ -75,23 +91,32 @@ class JavaClass:
         return chunks
 
 
+# JavaMethod: receives a `chunk`, which is the method string.
 class JavaMethod:
     def __init__(self, chunk):
         self.method = chunk
         self.name = chunk[:chunk.find("(")].split()[-1]
 
+    # tokens: a getter that returns a 1-dimensional space-delimited
+    # string of tokens for the method.
     def tokens(self):
         tokens = javalang.tokenizer.tokenize(self.method)
         return [" ".join(token.value for token in tokens)][0]
 
+    # __str__: String representation for a method.
     def __str__(self):
         return self.method
 
+    # __iter__: Iterator for the tokens of each method.
     def __iter__(self):
         tokens = javalang.tokenizer.tokenize(self.method)
         return iter([tok.value for tok in tokens])
 
 
+# CWE4J: receives a path `root` to a folder containing labeled Java
+# classes with known vulnerabilities. Each Java file in the `root`
+# directory is then added to a dictionary `data` of the form
+# {vulnerability: [path_1, path_2, ..., path_n]}
 class CWE4J:
     def __init__(self, root):
         self.data = {}
@@ -99,6 +124,10 @@ class CWE4J:
         for directory in os.listdir(root):
             self.add(directory)
 
+    # add: if the vulnerability already has an entry in `self.data`,
+    # the filepath will be appended to the value list. Otherwise,
+    # the name of the vulnerability and a list containing the path to
+    # the vulnerability are created as the key and value, respectively.
     def add(self, filepath):
         vuln_name = filepath.split("__")[0]
         if vuln_name in self.data.keys():
@@ -106,17 +135,26 @@ class CWE4J:
         else:
             self.data[vuln_name] = [self.root + "/" + filepath]
 
+    # __iter__: iterator for the keys of `self.data`.
     def __iter__(self):
         return iter(self.data.keys())
 
+    # __getitem__: allows a CWE4J object to be indexed by key.
     def __getitem__(self, item):
         return self.data[item]
 
+    # __len__: returns the number of keys in `self.data`.
     def __len__(self):
         return len(self.data.keys())
 
 
+# Javalect: contains functions that are responsible for
+# Achilles' core functionality.
 class Javalect:
+    # train_models: trains several models from appropriately names
+    # Java files from a `root` directory. The `threshold` will tell
+    # Achilles to ignore any vulnerability categories that contain
+    # less than a given number of examples to train on.
     @staticmethod
     def train_models(root, threshold=0):
         cwe4j = CWE4J(root)
@@ -124,6 +162,12 @@ class Javalect:
             if len(cwe4j[cwe]) >= threshold:
                 Javalect._train_model(str(cwe), cwe4j[cwe])
 
+    # _train_model: A helper method for `train_models`, that examines
+    # the method name of each method in the given training files.
+    # If a method name contains the word "bad", it is labeled with a
+    # 1; if it contains "good", it is labeled with a 0. The labeled
+    # data is returned in a pandas dataframe of the form
+    # [tokenized java method, binary polarity bit (0/1)].
     @staticmethod
     def _train_model(cwe_name, cwe_paths):
         df = [["input", "label"]]
@@ -148,12 +192,17 @@ class Javalect:
             writer = csv.writer(fd)
             writer.writerows(df[1:])
 
+    # _embed: given a Keras tokenizer `tok`, embed a vectorized
+    # string to a higher dimension, of size `MAX_LEN`.
     @staticmethod
     def _embed(tok, method):
         sequences = tok.texts_to_sequences([method])
         sequences_matrix = sequence.pad_sequences(sequences, maxlen=MAX_LEN)
         return sequences_matrix
 
+    # analyze: creates a Keras tokenizer with from a vocabulary
+    # csv, loads all vulnerability models into memory, then
+    # predicts the probability of risk for each method.
     @staticmethod
     def analyze(path):
         from keras.models import load_model
@@ -187,6 +236,11 @@ class Javalect:
               " vulnerabilities in " + str(datetime.now() - start) + "\x1b[m.")
 
 
+# _fmt: truncates a probability of risk string `x` to 6 characters
+# long. If the value of `x` is considerably small, we let "x-> -∞".
+# We pass a list of risk probabilities `ls` to perform some last
+# minute computation to determine, in this case, the maximum value,
+# and inject an ANSI escape code to give it some color.
 def _fmt(ls, x):
     if float(ls[x]) < 0.0001:
         return "x-> -∞"
