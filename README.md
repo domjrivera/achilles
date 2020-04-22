@@ -1,5 +1,7 @@
-# [WIP]Project Achilles
+# Project Achilles
 ![Achilles](assets/logo.jpg)
+
+This research project was published [here](https://ieeexplore.ieee.org/document/8967427).
 
 ## Calling Achilles from the Terminal
 In your terminal, enter `nano ~/.bash_profile`, then add the line `alias achilles="python3 <path-to-achilles.py>"`
